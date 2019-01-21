@@ -1,13 +1,11 @@
-# Lab 1 - FLEX Scanner
-
-## Issues
-```
-* Suppose to catch all possible tokens so that no input should be copied to output.
-```
+# Lab 2 - Symbol Table
 
 `Files:`
 * lang.l
 * lex.h
+* cSymbol.h
+* cSymbolTable.h
+* cSymbolTable.cpp
 * main.cpp
 * tokens.h
 * makefile
@@ -20,34 +18,32 @@
 
 ## Description
 ```
-lang.l is the starting point for the lab.  You need to edit this file so that FLEX can build a scanner for the language.  A list of all tokens is given in tokens.h.
+cSymbolTable.h and lang.l is the starting point of this lab.
 
-tokens.h must not be edited and gives all the values of what FLEX must return for each token.
+Need to modify lang.l to call appropriate methods for scope and symbols.
 
-In order to complete this lab, the scanner must pass the regression tests.
+Need to modify cSymbolTable.h to implement the methods provided by the function prototypes.
 
 ```
 
-## Tokens
+## Example
+```
+{
+    a;
+    b;
+    {
+        c;
+        d;
+    }
+}
 
-| Punctuation | Operators | Keywords |     Others    |
-|:-----------:|:---------:|:--------:|:-------------:|
-|      (      |     !=    |  program |  identifiers  |
-|      )      |     ==    |    if    | integer const |
-|      {      |     &&    |   else   |  float const  |
-|      }      |     \|\|  |   endif  |              |
-|      [      |           |   while  |               |
-|      ]      |           |   print  |               |
-|      ;      |           |    int   |               |
-|      '      |           |   float  |               |
-|      .      |           |   char   |               |
-|      +      |           |  struct  |               |
-|      -      |           |   array  |               |
-|      *      |           |  return  |               |
-|      /      |           |   char   |               |
-|      %      |           |          |               |
-|      =      |           |          |               |
-|             |           |          |               |
+Explaination:
 
+a and b are in their own scope.
+c and d are in their own scope.
+
+when the } bracket ends, c and d will be out of scope and the table for that is therefor 
+popped off the stack.
+```
 ## Author
 * [Kevin Xu](https://github.com/kevinjiaxu96)

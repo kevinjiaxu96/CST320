@@ -1,24 +1,28 @@
-##############################################
-# Makefile for CST320 labs
+#**************************************
+# Makefile
 #
-# Author: Philip Howard
+# Makefile for lang compiler
+#
+# Author: Phil Howard 
 # phil.howard@oit.edu
 #
-# Nov. 24, 2015
+# Date: Jan. 12, 2016
 #
-
-TAR_FILE=lab1_jiawei_xu.tar
-COPTS=-Wall -g -c  -O0
+TAR_FILE=lab2_jiawei_xu.tar
+COPTS=-Wall -g -c -O0 -std=c++11
 OBJS=main.o \
 	 langlex.o \
+	 cSymbolTable.o \
 
 all: lang
 
 clean:
 	rm -f $(OBJS)
+	rm -f *.o
 	rm -f langlex.c
 	rm -f lang
-	rm -f out
+	rm -f out.xml
+	rm -f out2.xml
 
 .c.o:
 	g++ $(COPTS) $? -o $@
@@ -26,7 +30,7 @@ clean:
 .cpp.o:
 	g++ $(COPTS) $? -o $@
 
-main.o: main.cpp langlex.c 
+main.o: main.cpp langlex.c
 	g++ $(COPTS) main.cpp -o main.o
 
 langlex.c: lang.l
@@ -34,10 +38,13 @@ langlex.c: lang.l
 
 langlex.o: langlex.c
 	g++ $(COPTS) -Wno-sign-compare $? -o $@
-	
+
 lang: $(OBJS)
 	g++ $(OBJS) -o lang
 
+cSymbolTable.o: cSymbolTable.cpp
+	g++ $(COPTS) -Wno-sign-compare $? -o $@
+
 tar:
 	rm -rf $(TAR_FILE)
-	tar -cvf $(TAR_FILE) *.h *.cpp *.md *.l feedback.txt [Mm]akefile test
+	tar -cvf $(TAR_FILE) *.h *.cpp *.md *.l [Mm]akefile test

@@ -9,18 +9,17 @@
 
 #include "lex.h"
 #include "tokens.h"
+#include "cSymbolTable.h"
+#include <iostream>
 
 // Macros that can be used to create debug output from the scanner
 // The first one does NOT create debug output, the second does.
 // Uncomment one or the other then use DO_RETURN(val) for all your return 
 // statements
-#define DO_RETURN(a) { return (a); }
-//#define DO_RETURN(a) { return Return(a); }
-
-#define DO_PUNCT_RETURN() { return ReturnPunct(); }
+#define DO_RETURN(a) return (a)
+//#define DO_RETURN(a) return Return(a)
 
 int Return(int val);
-int ReturnPunct();
 
 %}
 
@@ -79,14 +78,31 @@ S_COMMENTS      (\/\/(.+))
 {STRUCT}                    DO_RETURN(STRUCT);
 {ARRAY}                     DO_RETURN(ARRAY);
 {RETURN}                    DO_RETURN(RETURN);
-{IDENTIFIER}                DO_RETURN(IDENTIFIER);
+{IDENTIFIER}                {
+                                yylval.symbol = g_symbolTable.FindLocal(yytext);
+                                if (!yylval.symbol) {
+                                    yylval.symbol = new cSymbol(yytext);
+                                    g_symbolTable.Insert(yylval.symbol);
+                                }
+                                DO_RETURN(IDENTIFIER);
+                            }
 {NOT_EQUAL}                 DO_RETURN(NOT_EQUALS);
 {EQUALS}                    DO_RETURN(EQUALS);
 {AND}                       DO_RETURN(AND);
 {OR}                        DO_RETURN(OR);
-{S_COMMENTS}                {};
-{WHITE_SPACE}               {};
-{PUNCT}                     DO_RETURN(yytext[0]);
+{S_COMMENTS}                {}
+{WHITE_SPACE}               {}
+{PUNCT}                     {
+                                switch(yytext[0]) {
+                                    case '{':
+                                        g_symbolTable.IncreaseScope();
+                                        break;
+                                    case '}':
+                                        g_symbolTable.DecreaseScope();
+                                        break;
+                                }
+                                DO_RETURN(yytext[0]);
+                            }
 {JUNK}                      DO_RETURN(JUNK_TOKEN);
 
 %%
@@ -97,11 +113,4 @@ int Return(int val)
 {
     printf("Scanned '%s': %d\n", yytext, val);
     return val;
-}
-
-// This function allows to return ascii value of Punctuations using regex
-// rather than listing each punctuation each by each
-int ReturnPunct ()
-{
-    return static_cast<int>(yytext[0]);
 }
