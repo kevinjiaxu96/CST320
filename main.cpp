@@ -17,6 +17,7 @@
 #include "cSymbolTable.h"
 #include "lex.h"
 #include "tokens.h"
+#include "parse.h"
 
 // Define the global symbol table.
 // If we had a cSymbolTable.cpp, this would go there
@@ -64,24 +65,19 @@ int main(int argc, char **argv)
     int output_fd = fileno(output);
     if (dup2(output_fd, 1) != 1)
     {
-        std::cerr << "Unable to duplicate the file descriptor\n";
+        std::cerr << "Unable configure output stream\n";
         exit(-1);
     }
 
-    std::cout << "<program>\n";
-
-    token = yylex();
-    while (token != 0)
+    if (FindPROG())
     {
-        // if we found an identifier, print it out
-        if (token == IDENTIFIER) 
-            std::cout << yylval.symbol->ToString() << "\n";
-        // else
-        //     std::cout << token << ":" << yytext << "\n";
-        token = yylex();
+        std::cout << "Found a Program\n";
     }
-
-    std::cout << "</program>\n";
+    token = yylex();
+    if (token != 0)
+    {
+        std::cout << "Junk at end of program\n";
+    }
     fclose(output);
     return result;
 }

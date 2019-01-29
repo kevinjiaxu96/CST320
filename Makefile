@@ -8,11 +8,13 @@
 #
 # Date: Jan. 12, 2016
 #
-TAR_FILE=lab2_jiawei_xu.tar
+TAR_FILE=lab3_jiawei_xu.tar
 COPTS=-Wall -g -c -O0 -std=c++11
 OBJS=main.o \
 	 langlex.o \
 	 cSymbolTable.o \
+	 utils.o \
+	 parse.o \
 
 all: lang
 
@@ -23,6 +25,7 @@ clean:
 	rm -f lang
 	rm -f out.xml
 	rm -f out2.xml
+	rm -f out
 
 .c.o:
 	g++ $(COPTS) $? -o $@
@@ -45,6 +48,12 @@ lang: $(OBJS)
 cSymbolTable.o: cSymbolTable.cpp
 	g++ $(COPTS) -Wno-sign-compare $? -o $@
 
+utils.o: utils.cpp
+	g++ $(COPTS) -Wno-sign-compare $? -o $@
+
+parse.o: parse.cpp
+	g++ $(COPTS) -Wno-sign-compare $? -o $@
+
 tar:
 	rm -rf $(TAR_FILE)
-	tar -cvf $(TAR_FILE) *.h *.cpp *.md *.l [Mm]akefile test
+	tar -cvf $(TAR_FILE) *.h *.cpp *.md *.l [Mm]akefile

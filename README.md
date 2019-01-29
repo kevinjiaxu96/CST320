@@ -1,49 +1,41 @@
-# Lab 2 - Symbol Table
-
-`Files:`
-* lang.l
-* lex.h
-* cSymbol.h
-* cSymbolTable.h
-* cSymbolTable.cpp
-* main.cpp
-* tokens.h
-* makefile
-
+# Lab 3 - LL(1) Parser
 `Special File:`
 * feedback.txt - feedback file for instructor comments
 
 `Opional File:`
 * test files - regression tests
 
+`Source File:`
+* lab3_jiawei_xu.tar
+
 ## Description
 ```
-cSymbolTable.h and lang.l is the starting point of this lab.
 
-Need to modify lang.l to call appropriate methods for scope and symbols.
-
-Need to modify cSymbolTable.h to implement the methods provided by the function prototypes.
 
 ```
 
-## Example
+## Grammar
 ```
-{
-    a;
-    b;
-    {
-        c;
-        d;
-    }
-}
 
 Explaination:
 
-a and b are in their own scope.
-c and d are in their own scope.
+PROG  -> STMTS end
+STMTS -> STMT STMTS
+      -> λ
+STMT  -> EXPR ;
+EXPR  -> (EXPR) EXPR’
+      -> TERM
+EXPR’ -> PLUSOP (EXPR) EXPR’
+      -> λ
+PLUSOP -> +
+       -> -
+TERM  -> [EXPR] TERM’
+      -> num
+TERM’ -> TIMESOP [EXPR] TERM’
+      -> λ
+TIMESOP -> *
+        -> /
 
-when the } bracket ends, c and d will be out of scope and the table for that is therefor 
-popped off the stack.
 ```
 ## Author
 * [Kevin Xu](https://github.com/kevinjiaxu96)
