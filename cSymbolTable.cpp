@@ -25,6 +25,15 @@ cSymbolTable::cSymbolTable() {
     IncreaseScope();
 }
 
+void cSymbolTable::InitTable() {
+    cSymbol *ctype = new cSymbol("char");
+    cSymbol *iype = new cSymbol("int");
+    cSymbol *fype = new cSymbol("float");
+    Insert(ctype);
+    Insert(iype);
+    Insert(fype);
+}
+
 /*
 * Name: IncreaseScope
 * Description:

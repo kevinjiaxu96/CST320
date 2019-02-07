@@ -22,6 +22,7 @@ class cSymbolTable
         // Create a symbol table
         cSymbolTable();
 
+        void InitTable();
         // Increase the scope: add a level to the nested symbol table
         // Return value is the newly created scope
         symbolTable_t *IncreaseScope();
@@ -53,4 +54,4 @@ class cSymbolTable
 
 // Declaration for the global symbol table.
 // Definition is in main.cpp
-extern cSymbolTable g_symbolTable;
+extern cSymbolTable g_SymbolTable;

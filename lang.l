@@ -8,8 +8,9 @@
 //
 
 #include "lex.h"
-#include "tokens.h"
+#include "langparse.h"
 #include "cSymbolTable.h"
+#include <ctype.h>
 #include <iostream>
 
 // Macros that can be used to create debug output from the scanner
@@ -20,6 +21,7 @@
 //#define DO_RETURN(a) return Return(a)
 
 int Return(int val);
+int TypeID(char* text);
 
 %}
 
@@ -52,8 +54,8 @@ EQUALS          (==)
 AND             (&&)
 OR              ("||")
     //Others
-INT_VAL         [-+]?[0-9]+
-FLOAT_VAL       [-+]?[0-9]*\.?[0-9]+
+INT_VAL         [0-9]+
+FLOAT_VAL       [0-9]*\.?[0-9]+
 IDENTIFIER      [_a-zA-Z][_a-zA-Z0-9]*
     //Junk 
 JUNK            [:@#$'\|!^&\\`]
@@ -70,19 +72,25 @@ S_COMMENTS      (\/\/(.+))
 {ENDIF}                     DO_RETURN(ENDIF);
 {WHILE}                     DO_RETURN(WHILE);
 {PRINT}                     DO_RETURN(PRINT);
-{INT}                       DO_RETURN(INT);
-{FLOAT}                     DO_RETURN(FLOAT);
-{CHAR}                      DO_RETURN(CHAR);
-{INT_VAL}                   DO_RETURN(INT_VAL);
-{FLOAT_VAL}                 DO_RETURN(FLOAT_VAL);
+{CHAR}                      DO_RETURN(TypeID(yytext));
+{FLOAT}                     DO_RETURN(TypeID(yytext));
+{INT}                       DO_RETURN(TypeID(yytext));
+{INT_VAL}                   {
+                                yylval.int_val = atoi(yytext);
+                                DO_RETURN(INT_VAL);
+                            }
+{FLOAT_VAL}                 {
+                                yylval.float_val = atof(yytext);
+                                DO_RETURN(FLOAT_VAL);
+                            }
 {STRUCT}                    DO_RETURN(STRUCT);
 {ARRAY}                     DO_RETURN(ARRAY);
 {RETURN}                    DO_RETURN(RETURN);
 {IDENTIFIER}                {
-                                yylval.symbol = g_symbolTable.FindLocal(yytext);
+                                yylval.symbol = g_SymbolTable.FindLocal(yytext);
                                 if (!yylval.symbol) {
                                     yylval.symbol = new cSymbol(yytext);
-                                    g_symbolTable.Insert(yylval.symbol);
+                                    g_SymbolTable.Insert(yylval.symbol);
                                 }
                                 DO_RETURN(IDENTIFIER);
                             }
@@ -92,17 +100,7 @@ S_COMMENTS      (\/\/(.+))
 {OR}                        DO_RETURN(OR);
 {S_COMMENTS}                {}
 {WHITE_SPACE}               {}
-{PUNCT}                     {
-                                switch(yytext[0]) {
-                                    case '{':
-                                        g_symbolTable.IncreaseScope();
-                                        break;
-                                    case '}':
-                                        g_symbolTable.DecreaseScope();
-                                        break;
-                                }
-                                DO_RETURN(yytext[0]);
-                            }
+{PUNCT}                     {DO_RETURN(yytext[0]);}
 {JUNK}                      DO_RETURN(JUNK_TOKEN);
 
 %%
@@ -114,3 +112,19 @@ int Return(int val)
     printf("Scanned '%s': %d\n", yytext, val);
     return val;
 }
+
+int TypeID(char* text)
+{
+    for (int i = 0; text[i]; ++i)
+    {
+        text[i] = std::tolower(text[i]);
+    }
+    yylval.symbol = g_SymbolTable.Find(text);
+    if (!yylval.symbol)
+    {
+        yylval.symbol = new cSymbol(text);
+        g_SymbolTable.Insert(yylval.symbol);
+    }
+    return TYPE_ID;
+}
+
