@@ -21,7 +21,7 @@
 //#define DO_RETURN(a) return Return(a)
 
 int Return(int val);
-int TypeID(char* text);
+int TypeID(const char* token);
 
 %}
 
@@ -83,14 +83,14 @@ S_COMMENTS      (\/\/(.+))
                                 yylval.float_val = atof(yytext);
                                 DO_RETURN(FLOAT_VAL);
                             }
-{STRUCT}                    DO_RETURN(STRUCT);
+{STRUCT}                    {   DO_RETURN(STRUCT);  }
 {ARRAY}                     DO_RETURN(ARRAY);
 {RETURN}                    DO_RETURN(RETURN);
 {IDENTIFIER}                {
                                 yylval.symbol = g_SymbolTable.FindLocal(yytext);
-                                if (!yylval.symbol) {
+                                if (!yylval.symbol)
+                                {
                                     yylval.symbol = new cSymbol(yytext);
-                                    g_SymbolTable.Insert(yylval.symbol);
                                 }
                                 DO_RETURN(IDENTIFIER);
                             }
@@ -113,18 +113,12 @@ int Return(int val)
     return val;
 }
 
-int TypeID(char* text)
+int TypeID(const char* token)
 {
-    for (int i = 0; text[i]; ++i)
-    {
-        text[i] = std::tolower(text[i]);
-    }
-    yylval.symbol = g_SymbolTable.Find(text);
+    yylval.symbol = g_SymbolTable.Find(token);
     if (!yylval.symbol)
     {
-        yylval.symbol = new cSymbol(text);
-        g_SymbolTable.Insert(yylval.symbol);
+        yylval.symbol = new cSymbol(token);
     }
-    return TYPE_ID;
+    DO_RETURN(TYPE_ID);
 }
-

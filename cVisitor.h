@@ -23,6 +23,8 @@ class cStmtNode;
 class cStmtsNode;
 class cSymbol;
 
+class cArgsNode;
+
 class cVisitor
 {
     public:

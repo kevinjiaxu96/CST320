@@ -56,3 +56,8 @@ tar:
 	rm -rf $(TAR_FILE)
 	tar -cf $(TAR_FILE) *.h *.cpp *.md *.l *.y [Mm]akefile test
 	
+trans: tar
+	scp $(TAR_FILE) jiawei.xu@unix.cset.oit.edu:~/Classes/CST320
+
+t:
+	./lang test/test6.lang

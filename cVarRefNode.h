@@ -19,7 +19,16 @@ class cVarRefNode : public cExprNode
     public:
         cVarRefNode(cSymbol* sym) : cExprNode()
         {
-            AddChild(sym);
+            cSymbol* isExist = g_SymbolTable.FindLocal(sym->GetName());
+            if (!isExist)
+            {
+                isExist = g_SymbolTable.Find(sym->GetName());
+                if (!isExist)
+                {
+                    isExist = sym;
+                }
+            }
+            AddChild(isExist);
         }
         virtual string NodeType() { return string("varref"); }
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }

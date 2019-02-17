@@ -27,4 +27,10 @@
 #include "cBinExprNode.h"
 #include "cFloatExprNode.h"
 #include "cVarRefNode.h"
-
+#include "cIfNode.h"
+#include "cRetNode.h"
+#include "cWhileNode.h"
+#include "cAssignNode.h"
+#include "cStructNode.h"
+#include "cArgsNode.h"
+#include "cFuncNode.h"
