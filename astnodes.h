@@ -34,3 +34,6 @@
 #include "cStructNode.h"
 #include "cArgsNode.h"
 #include "cFuncNode.h"
+#include "cFunCallNode.h"
+#include "cParamsNode.h"
+#include "cArrayNode.h"

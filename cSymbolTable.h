@@ -11,9 +11,9 @@
 //
 
 #include "cSymbol.h"
-#include <stack>
+#include <vector>
 #include <unordered_map>
-using std::stack;
+using std::vector;
 using std::unordered_map;
 typedef std::unordered_map<string, cSymbol*> symbolTable_t;
 class cSymbolTable
@@ -49,11 +49,9 @@ class cSymbolTable
         // Returns nullptr if the symbol is not found.
         cSymbol *FindLocal(string name);
     private:
-        stack<symbolTable_t*> _default;
+        vector<symbolTable_t*> _default;
 };
 
 // Declaration for the global symbol table.
 // Definition is in main.cpp
 extern cSymbolTable g_SymbolTable;
-extern bool isDec;
-extern bool isStruct;

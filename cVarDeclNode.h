@@ -18,18 +18,22 @@
 class cVarDeclNode : public cDeclNode
 {
     public:
-        cVarDeclNode(cSymbol* decl, cSymbol* decl2) : cDeclNode()
+        cVarDeclNode(cSymbol* typeID, cSymbol* iden) : cDeclNode()
         {
-            if (!g_SymbolTable.Find(decl->GetName()))
+            cSymbol *ifTypeExist = g_SymbolTable.Find(typeID->GetName());
+            cSymbol *ifIdenExist = g_SymbolTable.FindLocal(iden->GetName());
+            if (!ifTypeExist)
             {
-                g_SymbolTable.Insert(decl);
+                ifTypeExist = typeID;
+                g_SymbolTable.Insert(ifTypeExist);
             }
-            if (!g_SymbolTable.FindLocal(decl2->GetName()))
+            if (!ifIdenExist)
             {
-                g_SymbolTable.Insert(decl2);
+                ifIdenExist = iden;
+                g_SymbolTable.Insert(ifIdenExist);
             }
-            AddChild(decl);
-            AddChild(decl2);
+            AddChild(ifTypeExist);
+            AddChild(ifIdenExist);
         }
         virtual string NodeType() { return string("var_decl"); }
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }

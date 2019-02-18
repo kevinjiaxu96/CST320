@@ -69,14 +69,14 @@
 %type <decl_node> func_decl
 %type <decl_node> func_header
 %type <decl_node> func_prefix
-%type <ast_node> func_call
+%type <stmt_node> func_call
 %type <decls_node> paramsspec
 %type <decl_node> paramspec
 %type <stmts_node> stmts
 %type <stmt_node> stmt
 %type <expr_node> lval
-%type <ast_node> params
-%type <ast_node> param
+%type <decls_node> params
+%type <decl_node> param
 %type <expr_node> expr
 %type <expr_node> addit
 %type <expr_node> term
@@ -137,20 +137,30 @@ struct_decl:  STRUCT open decls close IDENTIFIER
                                     $$ = new cStructNode($3, $5);
                                 }
 array_decl: ARRAY TYPE_ID '[' INT_VAL ']' IDENTIFIER
-                                {  }
-
+                                {
+                                    $$ = new cArrayNode($2, $6, $4);
+                                }
+        |   ARRAY IDENTIFIER '[' INT_VAL ']' IDENTIFIER
+                                {
+                                    $$ = new cArrayNode($2, $6, $4);
+                                }
 func_decl:  func_header ';'
-                                { $$ = $1; }
+                                { 
+                                    $$ = $1; 
+                                    g_SymbolTable.DecreaseScope();
+                                }
         |   func_header  '{' decls stmts '}'
                                 { 
                                     $$ = $1;
                                     $$->AddChild($3);
                                     $$->AddChild($4);
+                                    g_SymbolTable.DecreaseScope();
                                 }
         |   func_header  '{' stmts '}'
                                 { 
                                     $$ = $1;
                                     $$->AddChild($3);
+                                    g_SymbolTable.DecreaseScope();
                                 }
 func_header: func_prefix paramsspec ')'
                                 { 
@@ -197,22 +207,29 @@ stmt:       IF '(' expr ')' stmts ENDIF ';'
                                     $$ = new cAssignNode($1);
                                     $$->AddChild($3);
                                 }
-        |   lval '=' func_call ';'   {  }
-        |   func_call ';'       {  }
+        |   lval '=' func_call ';'   
+                                {
+                                    $$ = new cAssignNode($1);
+                                    $$->AddChild($3);
+                                }
+        |   func_call ';'       { $$ = $1; }
         |   block               {
 
                                 }
         |   RETURN expr ';'     { $$ = new cRetNode($2); }
         |   error ';'           {}
 
-func_call:  IDENTIFIER '(' params ')' {  }
-        |   IDENTIFIER '(' ')'  {  }
+func_call:  IDENTIFIER '(' params ')' { $$ = new cFunCallNode($1, $3); }
+        |   IDENTIFIER '(' ')'  { $$ = new cFunCallNode($1); }
 
 varref:   varref '.' varpart    { 
                                     $$ = $1; 
                                     $$->AddChild($3);
                                 }
-        | varref '[' expr ']'   {  }
+        | varref '[' expr ']'   { 
+                                    $$ = $1;
+                                    $$->AddChild($3);
+                                }
         | varpart               { 
                                     $$ = new cVarRefNode($1); 
                                 }
@@ -221,12 +238,21 @@ varpart:  IDENTIFIER            { }
 
 lval:     varref                {  }
 
-params:     params',' param     {  }
-        |   param               {  }
+params:     params',' param     { 
+                                    $$ = $1;
+                                    $$->AddChild($3);
+                                }
+        |   param               {
+                                    $$ = new cParamsNode($1);
+                                }
 
 param:      expr                {  }
 
-expr:       expr EQUALS addit   {  }
+expr:       expr EQUALS addit   {
+                                    $$ = new cBinExprNode($1);
+                                    $$->AddChild(new cOpNode(EQUALS));
+                                    $$->AddChild($3);
+                                }
         |   addit               { $$ = $1; }
 
 addit:      addit '+' term      { 

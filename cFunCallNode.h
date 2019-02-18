@@ -18,10 +18,28 @@
 class cFunCallNode : public cStmtNode
 {
     public:
-        cFunCallNode(cDeclNode* param=nullptr) : cStmtNode()
+        cFunCallNode(cSymbol* iden) : cStmtNode()
         {
-            if (param) AddChild(param);
+            AddChild(iden);
         }
-        virtual string NodeType() { return string("func"); }
+        cFunCallNode(cSymbol* iden, cDeclNode* param) : cStmtNode()
+        {
+            cSymbol* isExist = g_SymbolTable.Find(iden->GetName());
+            if (!isExist) {
+                isExist = iden;
+            }
+            AddChild(isExist);
+            AddChild(param);
+        }
+        cFunCallNode(cSymbol* iden, cDeclsNode* params) : cStmtNode()
+        {
+            cSymbol* isExist = g_SymbolTable.Find(iden->GetName());
+            if (!isExist) {
+                isExist = iden;
+            }
+            AddChild(isExist);
+            AddChild(params);
+        }
+        virtual string NodeType() { return string("funcCall"); }
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
 };

@@ -20,8 +20,20 @@ class cFuncNode : public cDeclNode
     public:
         cFuncNode(cSymbol* typeId, cSymbol* identifier) : cDeclNode()
         {
-            AddChild(typeId);
-            AddChild(identifier);
+            cSymbol* isTypeExist = g_SymbolTable.Find(typeId->GetName());
+            cSymbol* isIdenExist = g_SymbolTable.Find(identifier->GetName());
+            if (!isTypeExist)
+            {
+                isTypeExist = typeId;
+                g_SymbolTable.Insert(isTypeExist);
+            }
+            if (!isIdenExist)
+            {
+                isIdenExist = identifier;
+                g_SymbolTable.Insert(isIdenExist);
+            }
+            AddChild(isTypeExist);
+            AddChild(isIdenExist);
         }
         virtual string NodeType() { return string("func"); }
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
