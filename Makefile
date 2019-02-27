@@ -8,7 +8,7 @@
 ##
 ## Date: Jan. 18, 2015
 ##
-TAR_FILE=lab4_jiawei_xu.tar
+TAR_FILE=lab5_jiawei_xu.tar
 COPTS=-Wall -g -c  -O0 -std=c++11
 OBJS=main.o \
 	 langlex.o \

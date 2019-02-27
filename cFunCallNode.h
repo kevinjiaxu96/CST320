@@ -15,14 +15,14 @@
 #include "cDeclNode.h"
 #include "cStmtsNode.h"
 
-class cFunCallNode : public cStmtNode
+class cFunCallNode : public cExprNode
 {
     public:
-        cFunCallNode(cSymbol* iden) : cStmtNode()
+        cFunCallNode(cSymbol* iden) : cExprNode()
         {
             AddChild(iden);
         }
-        cFunCallNode(cSymbol* iden, cDeclNode* param) : cStmtNode()
+        cFunCallNode(cSymbol* iden, cDeclNode* param) : cExprNode()
         {
             cSymbol* isExist = g_SymbolTable.Find(iden->GetName());
             if (!isExist) {
@@ -31,7 +31,7 @@ class cFunCallNode : public cStmtNode
             AddChild(isExist);
             AddChild(param);
         }
-        cFunCallNode(cSymbol* iden, cDeclsNode* params) : cStmtNode()
+        cFunCallNode(cSymbol* iden, cDeclsNode* params) : cExprNode()
         {
             cSymbol* isExist = g_SymbolTable.Find(iden->GetName());
             if (!isExist) {
@@ -39,6 +39,9 @@ class cFunCallNode : public cStmtNode
             }
             AddChild(isExist);
             AddChild(params);
+        }
+        virtual cDeclNode * GetType() { 
+            return dynamic_cast<cSymbol*>(GetChild(0))->GetDecl(); 
         }
         virtual string NodeType() { return string("funcCall"); }
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }

@@ -22,6 +22,7 @@ class cVarDeclNode : public cDeclNode
         {
             cSymbol *ifTypeExist = g_SymbolTable.Find(typeID->GetName());
             cSymbol *ifIdenExist = g_SymbolTable.FindLocal(iden->GetName());
+            m_id = typeID;
             if (!ifTypeExist)
             {
                 ifTypeExist = typeID;
@@ -32,9 +33,27 @@ class cVarDeclNode : public cDeclNode
                 ifIdenExist = iden;
                 g_SymbolTable.Insert(ifIdenExist);
             }
-            AddChild(ifTypeExist);
-            AddChild(ifIdenExist);
+            else
+            {
+                SemanticError("Symbol " + ifIdenExist->GetName() + " already defined in current scope");
+            }
+            if (ifIdenExist)
+            {
+                ifIdenExist->SetDecl(this);
+                AddChild(ifIdenExist);
+            }
+            if (ifTypeExist)
+            {
+                AddChild(ifTypeExist);
+            }          
         }
+        virtual bool IsInt()    { return m_id->GetDecl()->IsInt(); }
+        virtual bool IsFloat()  { return m_id->GetDecl()->IsFloat(); }
+        virtual bool IsChar()   { return m_id->GetDecl()->IsChar(); }
+        virtual bool IsType()   { return m_id->GetDecl()->IsType(); }        
+        virtual bool IsArray()  { return m_id->GetDecl()->IsArray(); }
         virtual string NodeType() { return string("var_decl"); }
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
+    private:
+        cSymbol *m_id;
 };

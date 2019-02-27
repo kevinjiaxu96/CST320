@@ -25,6 +25,16 @@ class cSymbol;
 
 class cArgsNode;
 
+class cFuncNode;
+
+class cParamNode;
+
+class cParamsNode;
+
+class cVarExprNode;
+
+class cBaseTypeNode;
+
 class cVisitor
 {
     public:
@@ -44,6 +54,7 @@ class cVisitor
         virtual void Visit(cStmtNode *node);
         virtual void Visit(cStmtsNode *node);
         virtual void Visit(cSymbol *node);
+        virtual void Visit(cBaseTypeNode *node);
     protected:
         void PreVisitAllNodes(cAstNode *node);
         void PostVisitAllNodes(cAstNode *node);

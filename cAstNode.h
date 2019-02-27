@@ -15,17 +15,38 @@ using std::vector;
 
 #include "cVisitor.h"
 
+void SemanticError(std::string error);
 class cAstNode
 {
     public:
-        typedef vector<cAstNode*>::iterator iterator;
-
         cAstNode() {}
-
+    protected:
         void AddChild(cAstNode *child)
         {
             m_children.push_back(child);
         }
+
+        bool HasChildren()      { return !m_children.empty(); }
+
+        int NumChildren()       { return (int)m_children.size(); }
+
+        cAstNode* GetChild(int child)
+        {
+            if (child >= (int)m_children.size()) return nullptr;
+            return m_children[child];
+        }
+        void SetChild(int child, cAstNode* node)
+        {
+            if (child < (int)m_children.size()) 
+            {
+                m_children[child] = node;
+            }
+        }
+        virtual string AttributesToString()   { return string(""); }
+        virtual string NodeType() = 0; //      { return "AST"; }
+    public:
+        // NOTE: the iterators are only allowed in the cVisitor class
+        typedef vector<cAstNode*>::iterator iterator;
 
         iterator FirstChild()
         {
@@ -35,15 +56,6 @@ class cAstNode
         iterator LastChild()
         {
             return m_children.end();
-        }
-
-        bool HasChildren()      { return !m_children.empty(); }
-
-        int NumChildren()       { return (int)m_children.size(); }
-        cAstNode* GetChild(int child)
-        {
-            if (child >= (int)m_children.size()) return nullptr;
-            return m_children[child];
         }
 
         // return a string representation of the node
@@ -60,7 +72,7 @@ class cAstNode
                 iterator it;
                 for (it=FirstChild(); it != LastChild(); it++)
                 {
-                    if ((*it) != nullptr) result += (*it)->ToString();
+                    if ( (*it) != nullptr) result += (*it)->ToString();
                 }
             }
 
@@ -72,11 +84,11 @@ class cAstNode
             return result;
         }
 
-        virtual string AttributesToString()   { return string(""); }
-        virtual string NodeType() = 0; //      { return "AST"; }
         virtual void Visit(cVisitor *visitor) = 0;
 
-    protected:
+    private:
         vector<cAstNode *> m_children;     // list of AST nodes for children
 
 };
+
+extern bool g_semanticErrorHappened;

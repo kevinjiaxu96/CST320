@@ -13,6 +13,7 @@
 
 #include "cAstNode.h"
 #include "cExprNode.h"
+#include <iostream>
 
 class cIntExprNode : public cExprNode
 {
@@ -22,7 +23,14 @@ class cIntExprNode : public cExprNode
         {
             m_value = value;
         }
-
+        virtual cDeclNode *GetType()
+        {
+            if (m_value >= -128 && m_value <= 127)
+            {
+                return g_SymbolTable.Find("char")->GetDecl();
+            }
+            return g_SymbolTable.Find("int")->GetDecl();
+        }
         virtual string AttributesToString() 
         {
             return " value=\"" + std::to_string(m_value) + "\"";

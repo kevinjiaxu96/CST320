@@ -54,8 +54,8 @@ EQUALS          (==)
 AND             (&&)
 OR              ("||")
     //Others
-INT_VAL         [0-9]+
-FLOAT_VAL       [0-9]*\.?[0-9]+
+INT_VAL         -?[0-9]+
+FLOAT_VAL       -?[0-9]*\.?[0-9]+
 IDENTIFIER      [_a-zA-Z][_a-zA-Z0-9]*
     //Junk 
 JUNK            [:@#$'\|!^&\\`]

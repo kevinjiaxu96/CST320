@@ -21,11 +21,14 @@ class cDeclsNode : public cAstNode
         }
 
         // Add a decl to the list
-        void Insert(cDeclNode *decl)
+        void InsertDecl(cDeclNode *decl)
         {
             AddChild(decl);
         }
-
+        void InsertParamSpec(cDeclNode* spec)
+        {
+            AddChild(spec);
+        }
         virtual string NodeType() { return string("decls"); }
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
 };

@@ -14,10 +14,10 @@
 #include "cExprNode.h"
 #include "cSymbolTable.h"
 
-class cVarRefNode : public cExprNode
+class cVarExprNode : public cExprNode
 {
     public:
-        cVarRefNode(cSymbol* sym) : cExprNode()
+        cVarExprNode(cSymbol* sym) : cExprNode()
         {
             cSymbol* isExist = g_SymbolTable.FindLocal(sym->GetName());
             if (!isExist)
@@ -25,11 +25,31 @@ class cVarRefNode : public cExprNode
                 isExist = g_SymbolTable.Find(sym->GetName());
                 if (!isExist)
                 {
-                    isExist = sym;
+                    SemanticError("Symbol " + sym->GetName() + " not defined");
                 }
             }
-            AddChild(isExist);
+            if (isExist)
+            {
+                AddChild(isExist);
+                m_name = isExist;
+            }
+        }
+        void InsertExpr(cExprNode* expr)
+        {
+            AddChild(expr);
+        }
+        void InsertVarpart(cSymbol* sym)
+        {
+            AddChild(sym);
+        }
+        virtual cDeclNode *GetType() 
+        { 
+            if (m_name)
+                return m_name->GetDecl(); 
+            return nullptr;
         }
         virtual string NodeType() { return string("varref"); }
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
+    protected:
+        cSymbol *m_name;
 };

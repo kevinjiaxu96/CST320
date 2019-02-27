@@ -21,6 +21,7 @@
 // define global variables
 cSymbolTable g_SymbolTable;
 long long cSymbol::nextId;
+bool g_semanticErrorHappened = false;
 
 // takes two string args: input_file, and output_file
 int main(int argc, char **argv)

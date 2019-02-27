@@ -13,14 +13,35 @@
 
 #include "cAstNode.h"
 #include "cExprNode.h"
+#include "cOpNode.h"
+#include <iostream>
 
 class cBinExprNode : public cExprNode
 {
 public:
-    cBinExprNode(cExprNode *child=nullptr) : cExprNode() 
+    cBinExprNode(cExprNode *left, cOpNode* op, cExprNode *right) : cExprNode() 
     {
-        if (child) AddChild(child);
+        m_left = left;
+        m_right = right;
+        AddChild(left);
+        AddChild(op);
+        AddChild(right);
+    }
+    virtual cDeclNode * GetType()
+    {
+        if (m_left->GetType()->IsFloat())
+            return m_left->GetType();
+        else if (m_right->GetType()->IsFloat())
+            return m_right->GetType();
+        else if (m_left->GetType()->IsInt() && m_right->GetType()->IsChar())
+            return m_right->GetType();
+        else if (m_left->GetType() == m_right->GetType())
+            return m_left->GetType();
+        return g_SymbolTable.Find("int")->GetDecl();
     }
     virtual string NodeType() { return string("expr");}
     virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
+protected:
+    cExprNode *m_left;
+    cExprNode *m_right;
 };

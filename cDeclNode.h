@@ -15,4 +15,10 @@ class cDeclNode : public cAstNode
 {
     public:
         cDeclNode() : cAstNode() {}
+        virtual bool IsFloat() { return false; }
+        virtual bool IsInt() { return false; }
+        virtual bool IsChar() { return false; }
+        virtual bool IsType() { return false; }
+        virtual bool IsArray() { return false; }
+        virtual bool IsFunc() { return false; }
 };

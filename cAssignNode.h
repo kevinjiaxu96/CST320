@@ -13,13 +13,32 @@
 
 #include "cAstNode.h"
 #include "cExprNode.h"
+#include "cStmtNode.h"
+#include "cVarExprNode.h"
+#include <iostream>
 
-class cAssignNode : public cExprNode
+class cAssignNode : public cStmtNode
 {
 public:
-    cAssignNode(cExprNode *child=nullptr) : cExprNode() 
+    cAssignNode(cVarExprNode *lval, cExprNode *expr) : cStmtNode() 
     {
-        if (child) AddChild(child);
+        if (expr && expr->GetType() && lval && lval->GetType())
+        {   
+            if (lval->GetType()->IsChar())
+            {
+                if (expr->GetType()->IsInt() && !expr->GetType()->IsChar())
+                    SemanticError("Cannot assign int to char");
+                else if (expr->GetType()->IsFloat())
+                    SemanticError("Cannot assign float to char");
+            }
+            else if (lval->GetType()->IsInt())
+            {
+                if (expr->GetType()->IsFloat())
+                    SemanticError("Cannot assign float to int");
+            }
+            AddChild(lval);
+            AddChild(expr);
+        }
     }
     virtual string NodeType() { return string("assign");}
     virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }

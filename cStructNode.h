@@ -13,6 +13,7 @@
 #include "cAstNode.h"
 #include "cDeclsNode.h"
 #include "cDeclNode.h"
+#include "cSymbolTable.h"
 
 class cStructNode : public cDeclNode
 {
@@ -22,10 +23,15 @@ class cStructNode : public cDeclNode
             if (!g_SymbolTable.Find(typeID->GetName()))
             {
                 g_SymbolTable.Insert(typeID);
+                typeID->SetIsType(true);
+                typeID->SetDecl(this);
             }
             AddChild(decls);
             AddChild(typeID);
         }
+        virtual bool IsStruct() { return true; }
         virtual string NodeType() { return string("struct_decl"); }
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
+    protected:
+        symbolTable_t *m_table;
 };

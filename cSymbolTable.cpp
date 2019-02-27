@@ -10,7 +10,7 @@
 //
 
 #include "cSymbolTable.h"
-#include <iostream>
+#include "cBaseTypeNode.h"
 
 using std::pair;
 
@@ -27,8 +27,17 @@ cSymbolTable::cSymbolTable() {
 
 void cSymbolTable::InitTable() {
     cSymbol *ctype = new cSymbol("char");
+    ctype->SetIsType(true);
+    ctype->SetDecl(new cBaseTypeNode(ctype->GetName(), 1, false));
+
     cSymbol *iype = new cSymbol("int");
+    iype->SetIsType(true);
+    iype->SetDecl(new cBaseTypeNode(iype->GetName(), 4, false));
+
     cSymbol *fype = new cSymbol("float");
+    fype->SetIsType(true);
+    fype->SetDecl(new cBaseTypeNode(fype->GetName(), 8, true));
+
     Insert(ctype);
     Insert(iype);
     Insert(fype);

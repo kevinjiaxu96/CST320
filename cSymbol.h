@@ -14,6 +14,7 @@
 using std::string;
 
 #include "cAstNode.h"
+#include "cDeclNode.h"
 
 class cSymbol : public cAstNode
 {
@@ -35,10 +36,35 @@ class cSymbol : public cAstNode
             result += "\" name=\"" + m_name + "\"";
             return result;
         }
+        void SetDecl(cDeclNode *decl)
+        {
+            m_decl = decl;
+        }
+        cDeclNode *GetType() 
+        {
+            return m_decl;
+        }
+
+        bool IsType()
+        {
+            return m_isType;
+        }
+        void SetIsType(bool isType)
+        {
+            m_isType = isType;
+        }
+        cDeclNode *GetDecl()
+        {
+            return m_decl;
+        }
+
+        virtual bool IsVar() { return true; }
         virtual string NodeType() { return string("sym"); }
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
     protected:
+        cDeclNode *m_decl;              // The declaration that defines this sym
         static long long nextId;        // Next avail symbol ID
         long long m_id;                 // Unique ID for this symbol
+        bool m_isType;
         string m_name;                  // name of symbol
 };
