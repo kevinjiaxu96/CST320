@@ -7,6 +7,8 @@
 // Author: Phil Howard 
 // phil.howard@oit.edu
 //
+// Date: Nov. 29, 2015
+//
 
 #include "cAstNode.h"
 #include "cExprNode.h"
@@ -22,15 +24,19 @@ class cParamListNode : public cAstNode
         }
 
         // add the next actual param
-        void InsertParam(cExprNode *param)
+        void Insert(cExprNode *param)
         {
             AddChild(param);
         }
+
+        int NumParams() { return NumChildren(); }
+
         cExprNode *GetParam(int index)
         {
             return (cExprNode *)GetChild(index);
         }
-        int NumParams() { return NumChildren(); }
+
+        // return a string representation of the node
         virtual string NodeType() { return string("params"); }
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
 };

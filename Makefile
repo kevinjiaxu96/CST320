@@ -6,14 +6,14 @@
 ## Author: Phil Howard 
 ## phil.howard@oit.edu
 ##
-## Date: Jan. 18, 2015
+## Date: Nov. 28, 2015
 ##
-TAR_FILE=lab5_jiawei_xu.tar
+
 COPTS=-Wall -g -c  -O0 -std=c++11
 OBJS=main.o \
 	 langlex.o \
 	 langparse.o \
-	 cVisitor.o
+	 cVisitor.o \
 
 all: lang
 
@@ -25,8 +25,7 @@ clean:
 	rm -f lang
 	rm -f out.xml
 	rm -f out2.xml
-	rm -f $(TAR_FILE)
-	
+
 .cpp.o:
 	g++ $(COPTS) $? -o $@
 
@@ -48,6 +47,3 @@ langparse.c: lang.y
 lang: $(OBJS)
 	g++ $(OBJS) -o lang
 
-tar:
-	rm -rf $(TAR_FILE)
-	tar -cf $(TAR_FILE) *.h *.cpp *.md *.l *.y [Mm]akefile test

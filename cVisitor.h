@@ -1,17 +1,9 @@
 #pragma once
-//*******************************************************
-// Class declaration for Visitor base class
-//
-// Author: Phil Howard
-// Email:  phil.howard@oit.edu
 
-
-// Forward declarations of all node types.
-// The forwardness of these declarations are necessary to aviod circular include dependencies
 class cAstNode;
-class cArrayDeclNode;
+class cAstNode;
 class cAssignNode;
-class cBinExprNode;
+class cBinaryExprNode;
 class cBlockNode;
 class cDeclNode;
 class cDeclsNode;
@@ -23,9 +15,7 @@ class cIfNode;
 class cIntExprNode;
 class cOpNode;
 class cParamListNode;
-class cParamsNode;
 class cPrintNode;
-class cProgramNode;
 class cReturnNode;
 class cStmtNode;
 class cStmtsNode;
@@ -34,7 +24,6 @@ class cSymbol;
 class cVarDeclNode;
 class cVarExprNode;
 class cWhileNode;
-class cBaseTypeNode;
 
 class cVisitor
 {
@@ -44,9 +33,8 @@ class cVisitor
         virtual void VisitAllNodes(cAstNode *node) = 0;
 
         virtual void Visit(cAstNode *node);
-        virtual void Visit(cArrayDeclNode *node);
         virtual void Visit(cAssignNode *node);
-        virtual void Visit(cBinExprNode *node);
+        virtual void Visit(cBinaryExprNode *node);
         virtual void Visit(cBlockNode *node);
         virtual void Visit(cDeclNode *node);
         virtual void Visit(cDeclsNode *node);
@@ -58,9 +46,7 @@ class cVisitor
         virtual void Visit(cIntExprNode *node);
         virtual void Visit(cOpNode *node);
         virtual void Visit(cParamListNode *node);
-        virtual void Visit(cParamsNode *node);
         virtual void Visit(cPrintNode *node);
-        virtual void Visit(cProgramNode *node);
         virtual void Visit(cReturnNode *node);
         virtual void Visit(cStmtNode *node);
         virtual void Visit(cStmtsNode *node);
@@ -69,7 +55,6 @@ class cVisitor
         virtual void Visit(cVarDeclNode *node);
         virtual void Visit(cVarExprNode *node);
         virtual void Visit(cWhileNode *node);
-        virtual void Visit(cBaseTypeNode *node);
     protected:
         void PreVisitAllNodes(cAstNode *node);
         void PostVisitAllNodes(cAstNode *node);

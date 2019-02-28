@@ -1,45 +1,49 @@
 #pragma once
 //**************************************
-// cFunCallNode.h
+// cFuncExprNode.h
 //
-// Defines an AST node for an integer constant (literals).
+// Defines AST node for function calls
 //
-// Inherits from cExprNode so that integer constants can be used anywhere 
-// expressions are used.
+// Inherits from cExprNode so that functions can be used in expressions
 //
-// Author: Jiawei Xu
+// Author: Phil Howard 
+// phil.howard@oit.edu
+//
+// Date: Feb. 6, 2016
 //
 
 #include "cAstNode.h"
-#include "cExprNode.h"
 #include "cStmtsNode.h"
 #include "cParamListNode.h"
+#include "cExprNode.h"
 
 class cFuncExprNode : public cExprNode
 {
     public:
-        cFuncExprNode(cSymbol* iden, cParamListNode *params) : cExprNode()
+        // params are the symbol for the func decl, and the params
+        cFuncExprNode(cSymbol *name, cParamListNode *params)
+            : cExprNode()
         {
-            AddChild(iden);
+            AddChild(name);
             AddChild(params);
 
-            if (iden->GetDecl() == nullptr)
+            if (name->GetDecl() == nullptr)
             {
-                SemanticError(iden->GetName() + " is not declared");
+                SemanticError(name->GetName() + " is not declared");
                 return ;
             }
 
-            if (!iden->GetDecl()->IsFunc())
+            if (!name->GetDecl()->IsFunc())
             {
-                SemanticError(iden->GetName() + " is not a function");
+                SemanticError(name->GetName() + " is not a function");
                 return;
             }
 
             // already checked IsFunc() so this should be safe
-            cFuncDeclNode* func = dynamic_cast<cFuncDeclNode*>(iden->GetDecl());
-            if (func == nullptr || !func->IsDefinition())
+            cFuncDeclNode* func = dynamic_cast<cFuncDeclNode*>(name->GetDecl());
+            if (func == nullptr || !func->IsFullyDefined())
             {
-                SemanticError(iden->GetName() + " is not fully defined");
+                SemanticError(name->GetName() + " is not fully defined");
                 return;
             }
 
@@ -48,35 +52,41 @@ class cFuncExprNode : public cExprNode
             if ( (args == nullptr && params != nullptr) ||
                  (args != nullptr && params == nullptr))
             {
-                SemanticError(iden->GetName() + 
+                SemanticError(name->GetName() + 
                         " called with wrong number of arguments");
                 return;
             }
             else if (args != nullptr && params != nullptr)
             {
-                if (args->ChildCount() != params->NumParams())
+                if (args->NumDecls() != params->NumParams())
                 {
-                    SemanticError(iden->GetName() + 
+                    SemanticError(name->GetName() + 
                             " called with wrong number of arguments");
                     return;
                 }
 
-                for (int ii=0; ii<args->ChildCount(); ii++)
+                for (int ii=0; ii<args->NumDecls(); ii++)
                 {
                     if (!args->GetDecl(ii)->IsCompatibleWith(
                                 params->GetParam(ii)->GetType()))
                     {
-                        SemanticError(iden->GetName() + 
+                        SemanticError(name->GetName() + 
                                 " called with incompatible argument");
                         return;
                     }
                 }
             }
+        }
 
+        // Return the type of the var
+        virtual cDeclNode* GetType()
+        {
+            cSymbol* sym = dynamic_cast<cSymbol*>(GetChild(0));
+            return sym->GetDecl()->GetType();
         }
-        virtual cDeclNode * GetType() { 
-            return dynamic_cast<cSymbol*>(GetChild(0))->GetDecl(); 
-        }
+
+
+        // return string representation of the node
         virtual string NodeType() { return string("funcCall"); }
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
 };

@@ -4,23 +4,27 @@
 //
 // scanner definition file. flex uses this file to create the scanner
 //
-// Author: Jiawei Xu
+// Author: Phil Howard 
+// phil.howard@oit.edu
+//
+// Date: Feb. 20, 2016
 //
 
-#include "lex.h"
-#include "langparse.h"
+#include "cSymbol.h"
 #include "cSymbolTable.h"
-#include <ctype.h>
+#include "lex.h"
+#include "astnodes.h"
+#include "langparse.h"
 
 // Macros that can be used to create debug output from the scanner
 // The first one does NOT create debug output, the second does.
 // Uncomment one or the other then use DO_RETURN(val) for all your return 
 // statements
-#define DO_RETURN(a) return (a)
-//#define DO_RETURN(a) return Return(a)
+#define DO_RETURN(a) { return (a); }
+//#define DO_RETURN(a) { return Return(a); }
 
 int Return(int val);
-int TypeID(const char* token);
+static int Process_Id();
 
 %}
 
@@ -29,98 +33,46 @@ int TypeID(const char* token);
 %option nounput
 %option yylineno
 
-    /* definitions go here.*/
-    /* NOTE: You do not need to use definitions */
 
-    //Punctuation
-PUNCT           [.(){}[\];,+\-*/%=]
-    //Keywords
-PROGRAM         "program"
-IF              "if"
-ELSE            "else"
-ENDIF           "endif"
-WHILE           "while"
-PRINT           "print"
-INT             "int"
-FLOAT           "float"
-CHAR            "char"
-STRUCT          "struct"
-ARRAY           "array"
-RETURN          "return"
-    // Operators
-NOT_EQUAL       (!=)
-EQUALS          (==)
-AND             (&&)
-OR              ("||")
-    //Others
-INT_VAL         -?[0-9]+
-FLOAT_VAL       -?[0-9]*\.?[0-9]+
-IDENTIFIER      [_a-zA-Z][_a-zA-Z0-9]*
-    //Junk 
-JUNK            [:@#$'\|!^&\\`]
-    //Etc
-WHITE_SPACE     [[:space:]]
-S_COMMENTS      (\/\/(.+))
-
+    /* definitions go here. period is an example. */
+period          ['.']
+whitespace      '[\t\n\r ]'
 %%
 
-    // token definitions.
-{PROGRAM}                   DO_RETURN(PROGRAM);
-{IF}                        DO_RETURN(IF);
-{ELSE}                      DO_RETURN(ELSE);
-{ENDIF}                     DO_RETURN(ENDIF);
-{WHILE}                     DO_RETURN(WHILE);
-{PRINT}                     DO_RETURN(PRINT);
-{CHAR}                      DO_RETURN(TypeID(yytext));
-{FLOAT}                     DO_RETURN(TypeID(yytext));
-{INT}                       DO_RETURN(TypeID(yytext));
-{INT_VAL}                   {
-                                yylval.int_val = atoi(yytext);
-                                DO_RETURN(INT_VAL);
+    // token definitions 
+[\t\n\t ]*                  ;   /* Ignore whitespace */
+[{}()\[\],;\.+\-*/%=]       { 
+                                yylval.int_val = yytext[0];
+                                DO_RETURN(yytext[0]);
                             }
-{FLOAT_VAL}                 {
+"program"                   DO_RETURN(PROGRAM);
+"if"                        DO_RETURN(IF);
+"else"                      DO_RETURN(ELSE);
+"endif"                     DO_RETURN(ENDIF);
+"while"                     DO_RETURN(WHILE);
+"print"                     DO_RETURN(PRINT);
+"int"|"float"|"char"        {
+                                yylval.symbol = g_SymbolTable.Find(yytext);
+                                DO_RETURN(TYPE_ID);
+                            }
+"struct"                    DO_RETURN(STRUCT);
+"array"                     DO_RETURN(ARRAY);
+"return"                    DO_RETURN(RETURN);
+[a-zA-Z_][a-zA-Z0-9_]*      { return Process_Id(); }
+-?[0-9]+                      {
+                                yylval.int_val = atoi(yytext); 
+                                DO_RETURN(INT_VAL); 
+                            }
+-?[0-9]+\.[0-9]+              {
                                 yylval.float_val = atof(yytext);
                                 DO_RETURN(FLOAT_VAL);
                             }
-{STRUCT}                    {   DO_RETURN(STRUCT);  }
-{ARRAY}                     DO_RETURN(ARRAY);
-{RETURN}                    DO_RETURN(RETURN);
-{IDENTIFIER}                {
-                                yylval.symbol = g_SymbolTable.Find(yytext);
-                                if (yylval.symbol == nullptr)
-                                {
-                                    yylval.symbol = new cSymbol(yytext);
-                                }
-                                if (yylval.symbol->IsType())
-                                {
-                                    DO_RETURN(TYPE_ID);
-                                }
-                                else
-                                {
-                                    DO_RETURN(IDENTIFIER);
-                                }
-                            }
-{NOT_EQUAL}                 {
-                                yylval.int_val = NOT_EQUALS;
-                                DO_RETURN(NOT_EQUALS);
-                            }
-{EQUALS}                    {
-                                yylval.int_val = EQUALS;
-                                DO_RETURN(EQUALS);
-                            }
-{AND}                       {
-                                yylval.int_val = AND;
-                                DO_RETURN(AND);
-                            }
-{OR}                        {
-                                yylval.int_val = OR;
-                                DO_RETURN(OR);
-                            }
-{S_COMMENTS}                {}
-{WHITE_SPACE}               {}
-{PUNCT}                     {DO_RETURN(yytext[0]);}
-{JUNK}                      DO_RETURN(JUNK_TOKEN);
-
+"!="                        { yylval.int_val = NEQUALS; DO_RETURN(NEQUALS); }
+"=="                        { yylval.int_val = EQUALS; DO_RETURN(EQUALS); }
+"&&"                        { yylval.int_val = AND; DO_RETURN(AND); }
+"||"                        { yylval.int_val = OR; DO_RETURN(OR); }
+"//".*"\n"                  ;   /* Ignore comments */
+.                           DO_RETURN(JUNK_TOKEN);
 %%
 
 // This function allows us to do extra processing on each token
@@ -131,8 +83,21 @@ int Return(int val)
     return val;
 }
 
-int TypeID(const char* token)
+// Process identifiers to see if they are types of identifiers
+static int Process_Id()
 {
-    yylval.symbol = g_SymbolTable.Find(token);
-    DO_RETURN(TYPE_ID);
+    yylval.symbol = g_SymbolTable.Find(yytext);
+    if (yylval.symbol == nullptr)
+    {
+        yylval.symbol = new cSymbol(yytext); 
+    }
+    cDeclNode *decl = yylval.symbol->GetDecl();
+    if (decl != nullptr && decl->IsType())
+    { 
+        DO_RETURN(TYPE_ID); 
+    }
+    else
+    { 
+        DO_RETURN(IDENTIFIER); 
+    }
 }

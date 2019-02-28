@@ -15,11 +15,12 @@ using std::vector;
 
 #include "cVisitor.h"
 
-void SemanticError(std::string error);
 class cAstNode
 {
     public:
         cAstNode() {}
+
+
     protected:
         void AddChild(cAstNode *child)
         {
@@ -35,6 +36,8 @@ class cAstNode
             if (child >= (int)m_children.size()) return nullptr;
             return m_children[child];
         }
+
+
         void SetChild(int child, cAstNode* node)
         {
             if (child < (int)m_children.size()) 
@@ -42,8 +45,10 @@ class cAstNode
                 m_children[child] = node;
             }
         }
+
         virtual string AttributesToString()   { return string(""); }
         virtual string NodeType() = 0; //      { return "AST"; }
+
     public:
         // NOTE: the iterators are only allowed in the cVisitor class
         typedef vector<cAstNode*>::iterator iterator;
@@ -91,4 +96,3 @@ class cAstNode
 
 };
 
-extern bool g_semanticErrorHappened;

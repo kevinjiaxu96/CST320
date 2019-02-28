@@ -2,26 +2,32 @@
 //**************************************
 // cWhileNode.h
 //
-// Defines an AST node for an integer constant (literals).
+// Defines AST node for a while statement
 //
-// Inherits from cExprNode so that integer constants can be used anywhere 
-// expressions are used.
+// Inherits from cStmtNode because this is a statement
 //
-// Author: Jiawei Xu
+// Author: Phil Howard 
+// phil.howard@oit.edu
+//
+// Date: Nov. 29, 2015
 //
 
 #include "cAstNode.h"
-#include "cExprNode.h"
 #include "cStmtNode.h"
+#include "cExprNode.h"
 
 class cWhileNode : public cStmtNode
 {
-public:
-    cWhileNode(cExprNode *expr, cStmtNode *stmt) : cStmtNode()
-    {
-        AddChild(expr);
-        AddChild(stmt);
-    }
-    virtual string NodeType() { return string("while"); }
-    virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
+    public:
+        // params are the condition and the statement
+        cWhileNode(cExprNode *cond, cStmtNode *stmt)
+            : cStmtNode()
+        {
+            AddChild(cond);
+            AddChild(stmt);
+        }
+
+        // return a string representation of the node
+        virtual string NodeType() { return string("while"); }
+        virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
 };

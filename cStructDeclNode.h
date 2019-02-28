@@ -9,6 +9,8 @@
 // Author: Phil Howard 
 // phil.howard@oit.edu
 //
+// Date: Nov. 28, 2015
+//
 
 #include "cAstNode.h"
 #include "cDeclNode.h"
@@ -28,10 +30,10 @@ class cStructDeclNode : public cDeclNode
                         cSymbol *struct_id)
             : cDeclNode()
         {
-            cSymbol *name;
+            m_symTbl = symTbl;
+            cSymbol* name;
 
             AddChild(decls);
-            m_symTbl = symTbl;
 
             // Figure out if the ID we were passed already exists in the 
             // local symbol table. 
@@ -48,16 +50,21 @@ class cStructDeclNode : public cDeclNode
                     name = new cSymbol(struct_id->GetName());
                 }
 
-                name->SetIsType(true);
-
                 // insert the name of the struct into the global symbol table
                 g_SymbolTable.Insert(name);
+                name->SetDecl(this);
+                AddChild(name);
             }
-
-            AddChild(name);
         }
+
         virtual bool IsStruct() { return true; }
         virtual bool IsType()   { return true; }
+
+        // return the symbol for the declaration of the type.
+        // Since this IS a type, return our self
+        virtual cDeclNode* GetType() { return this; }
+
+        // return the name of the thing declared
         virtual string GetName() 
         { 
             cSymbol* name = dynamic_cast<cSymbol*>(GetChild(1));
@@ -72,12 +79,10 @@ class cStructDeclNode : public cDeclNode
             cSymbol* field = cSymbolTable::FindInTable(m_symTbl, name);
             return field;
         }
-        // return the symbol for the declaration of the type.
-        // Since this IS a type, return our self
-        virtual cDeclNode* GetType() { return this; }
-        virtual string NodeType() { return string("struct_decl"); }
+        
+        // return a string representation of the struct
+        virtual string NodeType()   { return string("struct_decl"); }
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
     protected:
-        cSymbolTable::symbolTable_t *m_symTbl; 
-
+        cSymbolTable::symbolTable_t *m_symTbl;      // symbol table for decls
 };

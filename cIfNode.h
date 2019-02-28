@@ -2,27 +2,36 @@
 //**************************************
 // cIfNode.h
 //
-// Defines an AST node for an integer constant (literals).
+// Defines AST node for an if statement
 //
-// Inherits from cExprNode so that integer constants can be used anywhere 
-// expressions are used.
+// Inherits from cStmtNode so that if statements can be included in lists of
+// statements
 //
-// Author: Jiawei Xu
+// Author: Phil Howard 
+// phil.howard@oit.edu
+//
+// Date: Nov. 29, 2015
 //
 
 #include "cAstNode.h"
-#include "cExprNode.h"
 #include "cStmtNode.h"
+#include "cStmtsNode.h"
+#include "cExprNode.h"
 
 class cIfNode : public cStmtNode
 {
-public:
-    cIfNode(cExprNode *expr, cStmtsNode *stmts, cStmtsNode *elstmts) : cStmtNode()
-    {
-        AddChild(expr);
-        AddChild(stmts);
-        AddChild(elstmts);
-    }
-    virtual string NodeType() { return string("if"); }
-    virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
+    public:
+        // params are the condition, the list of statments for the if part,
+        // and the list of statements for the else part. The else part can
+        // be nullptr
+        cIfNode(cExprNode *cond, cStmtsNode *ifStmt, cStmtsNode *elseStmt)
+        {
+            AddChild(cond);
+            AddChild(ifStmt);
+            AddChild(elseStmt);
+        }
+
+        // Return a string representation of the node
+        virtual string NodeType() { return string("if"); }
+        virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
 };

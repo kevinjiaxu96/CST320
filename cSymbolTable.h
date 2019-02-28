@@ -8,69 +8,42 @@
 // Author: Phil Howard 
 // phil.howard@oit.edu
 //
+// Date: Nov. 28, 2015
 //
 
-#include "cSymbol.h"
-#include <vector>
+#include <string>
 #include <unordered_map>
-#include "cBaseTypeNode.h"
-using std::vector;
+#include <list>
+#include <utility>      // use pair
+
+using std::string;
 using std::unordered_map;
+using std::list;
+using std::pair;
+
+#include "cSymbol.h"
+#include "cBaseTypeNode.h"
+
 class cSymbolTable
 {
     public:
-        class symbolTable_t
-        {
-            public:
-                symbolTable_t() : m_table()
-                {}
-                cSymbol *Find(string name)
-                {
-                    std::unordered_map<string, cSymbol*>::iterator ifExist = m_table.find(name);
-                    if (ifExist == m_table.end())
-                        return nullptr;
-                    else
-                        return ifExist->second;
-                }
-                void Insert(cSymbol *sym)
-                {
-                    std::pair<string, cSymbol*> new_val(sym->GetName(), sym);
-                    m_table.insert(new_val);
-                }
-            protected:
-                std::unordered_map<string, cSymbol*> m_table;
-        };
-        // Create a symbol table
+        // Type for a single symbol table
+        typedef unordered_map<string, cSymbol *> symbolTable_t;
+
+        // Increasing the scope must create a symbol table, so we call
+        // that function to do the actual work of creating the object
         cSymbolTable()
-        {
+        { 
             IncreaseScope();
         }
 
-        void InitTable()
-        {
-            cSymbol *baseType;
-
-            baseType = new cSymbol("char");
-            baseType->SetIsType(true);
-            baseType->SetDecl(new cBaseTypeNode(baseType->GetName(), 1, false));
-            Insert(baseType);
-
-            baseType = new cSymbol("int");
-            baseType->SetIsType(true);
-            baseType->SetDecl(new cBaseTypeNode(baseType->GetName(), 4, false));
-            Insert(baseType);
-
-            baseType = new cSymbol("float");
-            baseType->SetIsType(true);
-            baseType->SetDecl(new cBaseTypeNode(baseType->GetName(), 8, true));
-            Insert(baseType);
-        }
         // Increase the scope: add a level to the nested symbol table
         // Return value is the newly created scope
         symbolTable_t *IncreaseScope()
         {
             symbolTable_t *table = new symbolTable_t();
-            _default.push_back(table);
+            m_SymbolTable.push_front(table);
+
             return table;
         }
 
@@ -81,47 +54,81 @@ class cSymbolTable
         // AST will probably contain pointers to symbols in the popped table.
         symbolTable_t *DecreaseScope()
         {
-            _default.pop_back();
-            return _default.back();
+            m_SymbolTable.pop_front();
+
+            return m_SymbolTable.front();
         }
 
         // insert a symbol into the table
         // Assumes the symbol is not already in the table
         void Insert(cSymbol *sym)
         {
-            _default.back()->Insert(sym);
+            pair<string, cSymbol*> new_val(sym->GetName(), sym);
+            m_SymbolTable.front()->insert(new_val);
         }
 
-        // Do a lookup in the nested table. 
-        // Return the symbol for the outer-most match. 
+        // Do a lookup in the nested table. Return the symbol for the outer-most
+        // match. 
         // Returns nullptr if no match is found.
         cSymbol *Find(string name)
         {
             cSymbol *sym = nullptr;
 
-            for(vector<symbolTable_t*>::reverse_iterator rit = _default.rbegin();
-                rit != _default.rend(); ++rit)
+            list<symbolTable_t *>::iterator it = m_SymbolTable.begin();
+
+            for (auto it : m_SymbolTable)
             {
-                sym = (*rit)->Find(name);
+                sym = FindInTable(it, name);
                 if (sym != nullptr) return sym;
             }
+
             return nullptr;
         }
 
         // Find a symbol in the outer-most scope.
-        // NOTE: does not search nested scopes, only the outermost scope.
-        // Return the symbol if found.
         // Returns nullptr if the symbol is not found.
         cSymbol *FindLocal(string name)
         {
-            return _default.back()->Find(name);
+            return FindInTable(m_SymbolTable.front(), name);
         }
+
+        // Initialize the root symbol table. 
+        // This must be called on the table representing the outer most scope.
+        void InitRootTable()
+        {
+            cSymbol *baseType;
+
+            baseType = new cSymbol("char");
+            Insert(baseType);
+            baseType->SetDecl(new cBaseTypeNode("char", 1, false));
+
+            baseType = new cSymbol("int");
+            Insert(baseType);
+            baseType->SetDecl(new cBaseTypeNode("int", sizeof(int), false));
+
+            baseType = new cSymbol("float");
+            Insert(baseType);
+            baseType->SetDecl(new cBaseTypeNode("float", sizeof(double), true));
+        }
+
+        // Utility routine to do a lookup in a single level's table
+        // params are the table to do the lookup in and the name of the symbol
+        // Returns nullptr if the symbol isn't found.
+        // NOTE: this is static because it is the symbolTable_t that it operates
+        //       on is passed in as a param
         static cSymbol *FindInTable(symbolTable_t *table, string& name)
         {
-            return table->Find(name);
+            symbolTable_t::const_iterator got = table->find(name);
+
+            if (got == table->end())
+                return nullptr;
+            else
+                return got->second;
         }
-    private:
-        vector<symbolTable_t*> _default;
+    protected:
+        // list of symbol tables. The list contains the different levels
+        // in the nested table.
+        list<symbolTable_t *> m_SymbolTable;
 };
 
 // Declaration for the global symbol table.

@@ -2,43 +2,43 @@
 //**************************************
 // cAssignNode.h
 //
-// Defines an AST node for an arithmetic expression.
+// Defines AST node for assignment statments
 //
-// Inherits from cExprNode so that integer constants can be used anywhere 
-// expressions are used.
+// Author: Phil Howard 
+// phil.howard@oit.edu
 //
-// Author: Jiawei.xu
-// jiawei.xu@oit.edu
+// Date: Nov. 28, 2015
 //
 
 #include "cAstNode.h"
-#include "cExprNode.h"
 #include "cStmtNode.h"
+#include "cExprNode.h"
 #include "cVarExprNode.h"
 
 class cAssignNode : public cStmtNode
 {
-public:
-    cAssignNode(cVarExprNode *lval, cExprNode *expr) : cStmtNode() 
-    {
-        if (expr && expr->GetType() && lval && lval->GetType())
-        {   
-            if (lval->GetType()->IsChar())
-            {
-                if (expr->GetType()->IsInt() && !expr->GetType()->IsChar())
-                    SemanticError("Cannot assign int to char");
-                else if (expr->GetType()->IsFloat())
-                    SemanticError("Cannot assign float to char");
-            }
-            else if (lval->GetType()->IsInt())
-            {
-                if (expr->GetType()->IsFloat())
-                    SemanticError("Cannot assign float to int");
-            }
+    public:
+        // params are the lval and the expression
+        cAssignNode(cVarExprNode *lval, cExprNode *expr)
+            : cStmtNode()
+        {
             AddChild(lval);
             AddChild(expr);
+
+            if (!lval->GetDecl()->IsVar())
+            {
+                SemanticError(lval->GetDecl()->GetName() +
+                        " is not an lval");
+            }
+            else if (!lval->GetType()->IsCompatibleWith(expr->GetType()))
+            {
+                SemanticError("Cannot assign " +
+                        expr->GetType()->GetName() +
+                        " to " +
+                        lval->GetType()->GetName());
+            }
         }
-    }
-    virtual string NodeType() { return string("assign");}
-    virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
+
+        virtual string NodeType() { return string("assign"); }
+        virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
 };
