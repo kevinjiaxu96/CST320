@@ -13,16 +13,15 @@
 #include "cAstNode.h"
 #include "cExprNode.h"
 #include "cStmtNode.h"
-#include "cStmtsNode.h"
 
 class cIfNode : public cStmtNode
 {
 public:
-    cIfNode(cExprNode *expr, cStmtsNode *stmts, cStmtsNode *elstmts = nullptr) : cStmtNode()
+    cIfNode(cExprNode *expr, cStmtsNode *stmts, cStmtsNode *elstmts) : cStmtNode()
     {
         AddChild(expr);
         AddChild(stmts);
-        if (elstmts) AddChild(elstmts);
+        AddChild(elstmts);
     }
     virtual string NodeType() { return string("if"); }
     virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }

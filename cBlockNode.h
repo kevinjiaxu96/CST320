@@ -17,7 +17,6 @@
 #include "cDeclsNode.h"
 #include "cStmtNode.h"
 #include "cStmtsNode.h"
-#include <iostream>
 
 class cBlockNode : public cStmtNode
 {

@@ -14,17 +14,16 @@
 #include "cAstNode.h"
 #include "cExprNode.h"
 #include "cOpNode.h"
-#include <iostream>
 
 class cBinExprNode : public cExprNode
 {
 public:
-    cBinExprNode(cExprNode *left, cOpNode* op, cExprNode *right) : cExprNode() 
+    cBinExprNode(cExprNode *left, int op, cExprNode *right) : cExprNode() 
     {
         m_left = left;
         m_right = right;
         AddChild(left);
-        AddChild(op);
+        AddChild(new cOpNode(op));
         AddChild(right);
     }
     virtual cDeclNode * GetType()

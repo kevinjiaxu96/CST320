@@ -15,7 +15,6 @@
 #include "cExprNode.h"
 #include "cStmtNode.h"
 #include "cVarExprNode.h"
-#include <iostream>
 
 class cAssignNode : public cStmtNode
 {

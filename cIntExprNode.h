@@ -13,7 +13,6 @@
 
 #include "cAstNode.h"
 #include "cExprNode.h"
-#include <iostream>
 
 class cIntExprNode : public cExprNode
 {

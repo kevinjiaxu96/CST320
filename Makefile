@@ -12,7 +12,6 @@ TAR_FILE=lab5_jiawei_xu.tar
 COPTS=-Wall -g -c  -O0 -std=c++11
 OBJS=main.o \
 	 langlex.o \
-	 cSymbolTable.o \
 	 langparse.o \
 	 cVisitor.o
 
@@ -45,9 +44,6 @@ langlex.c: lang.l langparse.c
 
 langparse.c: lang.y
 	bison --defines=langparse.h lang.y -o langparse.c
-
-cSymbolTable.o: cSymbolTable.cpp
-	g++ $(COPTS) -Wno-sign-compare $? -o $@
 
 lang: $(OBJS)
 	g++ $(OBJS) -o lang

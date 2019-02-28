@@ -11,12 +11,13 @@
 //
 
 #include "cAstNode.h"
-#include <iostream>
+#include "cStmtNode.h"
+#include "cExprNode.h"
 
-class cRetNode : public cStmtNode
+class cReturnNode : public cStmtNode
 {
 public:
-    cRetNode(cExprNode *expr) : cStmtNode()
+    cReturnNode(cExprNode *expr) : cStmtNode()
     {
         AddChild(expr);
     }

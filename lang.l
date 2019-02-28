@@ -11,7 +11,6 @@
 #include "langparse.h"
 #include "cSymbolTable.h"
 #include <ctype.h>
-#include <iostream>
 
 // Macros that can be used to create debug output from the scanner
 // The first one does NOT create debug output, the second does.
@@ -87,17 +86,36 @@ S_COMMENTS      (\/\/(.+))
 {ARRAY}                     DO_RETURN(ARRAY);
 {RETURN}                    DO_RETURN(RETURN);
 {IDENTIFIER}                {
-                                yylval.symbol = g_SymbolTable.FindLocal(yytext);
-                                if (!yylval.symbol)
+                                yylval.symbol = g_SymbolTable.Find(yytext);
+                                if (yylval.symbol == nullptr)
                                 {
                                     yylval.symbol = new cSymbol(yytext);
                                 }
-                                DO_RETURN(IDENTIFIER);
+                                if (yylval.symbol->IsType())
+                                {
+                                    DO_RETURN(TYPE_ID);
+                                }
+                                else
+                                {
+                                    DO_RETURN(IDENTIFIER);
+                                }
                             }
-{NOT_EQUAL}                 DO_RETURN(NOT_EQUALS);
-{EQUALS}                    DO_RETURN(EQUALS);
-{AND}                       DO_RETURN(AND);
-{OR}                        DO_RETURN(OR);
+{NOT_EQUAL}                 {
+                                yylval.int_val = NOT_EQUALS;
+                                DO_RETURN(NOT_EQUALS);
+                            }
+{EQUALS}                    {
+                                yylval.int_val = EQUALS;
+                                DO_RETURN(EQUALS);
+                            }
+{AND}                       {
+                                yylval.int_val = AND;
+                                DO_RETURN(AND);
+                            }
+{OR}                        {
+                                yylval.int_val = OR;
+                                DO_RETURN(OR);
+                            }
 {S_COMMENTS}                {}
 {WHITE_SPACE}               {}
 {PUNCT}                     {DO_RETURN(yytext[0]);}
@@ -116,9 +134,5 @@ int Return(int val)
 int TypeID(const char* token)
 {
     yylval.symbol = g_SymbolTable.Find(token);
-    if (!yylval.symbol)
-    {
-        yylval.symbol = new cSymbol(token);
-    }
     DO_RETURN(TYPE_ID);
 }

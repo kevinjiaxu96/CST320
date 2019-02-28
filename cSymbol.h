@@ -24,6 +24,7 @@ class cSymbol : public cAstNode
         {
             m_id = ++nextId;        // get next available ID
             m_name = name;
+            m_isType = false;
         }
 
         // return name of symbol
@@ -40,11 +41,6 @@ class cSymbol : public cAstNode
         {
             m_decl = decl;
         }
-        cDeclNode *GetType() 
-        {
-            return m_decl;
-        }
-
         bool IsType()
         {
             return m_isType;

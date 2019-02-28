@@ -1,35 +1,25 @@
 #pragma once
 //**************************************
-// cFuncNode.h
+// cParamsNode.h
 //
-// Defines an AST node for an integer constant (literals).
+// Defines a class to represent a list of declarations.
 //
-// Inherits from cExprNode so that integer constants can be used anywhere 
-// expressions are used.
-//
-// Author: Jiawei Xu
+// Author: Phil Howard 
+// phil.howard@oit.edu
 //
 
 #include "cAstNode.h"
-#include "cDeclsNode.h"
 #include "cDeclNode.h"
-#include "cParamNode.h"
 
 class cParamsNode : public cDeclsNode
 {
     public:
-        cParamsNode() : cDeclsNode()
+        // param is the first decl in this decls
+        cParamsNode(cDeclNode *decl) : cDeclsNode(decl)
         {
-            
         }
-        cParamsNode(cDeclNode* typeId) : cDeclsNode()
-        {
-            AddChild(typeId);
-        }
-        void InsertParam(cParamNode *param)
-        {
-            AddChild(param);
-        }
-        virtual string NodeType() { return string("params"); }
+
+        // return the XML node name
+        virtual string NodeType() { return string("args"); }
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
 };

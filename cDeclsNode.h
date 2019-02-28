@@ -25,10 +25,19 @@ class cDeclsNode : public cAstNode
         {
             AddChild(decl);
         }
-        void InsertParamSpec(cDeclNode* spec)
+        void InsertParamSpec(cDeclNode *spec)
         {
             AddChild(spec);
         }
+        cDeclNode *GetDecl(int index)
+        {
+            return (cDeclNode*)GetChild(index);
+        }
+        cDeclsNode *GetParams()
+        {
+            return (cDeclsNode *)GetChild(2);
+        }
+        int ChildCount() { return NumChildren(); }
         virtual string NodeType() { return string("decls"); }
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
 };

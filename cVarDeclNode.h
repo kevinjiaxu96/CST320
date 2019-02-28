@@ -37,16 +37,30 @@ class cVarDeclNode : public cDeclNode
             {
                 SemanticError("Symbol " + ifIdenExist->GetName() + " already defined in current scope");
             }
+            if (ifTypeExist)
+            {
+                AddChild(ifTypeExist);
+            }   
             if (ifIdenExist)
             {
                 ifIdenExist->SetDecl(this);
                 AddChild(ifIdenExist);
-            }
-            if (ifTypeExist)
-            {
-                AddChild(ifTypeExist);
-            }          
+            }       
         }
+                // return the name of the variable
+        virtual string GetName() 
+        { 
+            cSymbol* name = dynamic_cast<cSymbol*>(GetChild(1));
+            return name->GetName(); 
+        }
+
+        // return the symbol for the type
+        virtual cDeclNode* GetType() 
+        { 
+            cSymbol* type_id = dynamic_cast<cSymbol*>(GetChild(0));
+            return type_id->GetDecl(); 
+        }
+        virtual bool IsVar() { return true; }
         virtual bool IsInt()    { return m_id->GetDecl()->IsInt(); }
         virtual bool IsFloat()  { return m_id->GetDecl()->IsFloat(); }
         virtual bool IsChar()   { return m_id->GetDecl()->IsChar(); }
