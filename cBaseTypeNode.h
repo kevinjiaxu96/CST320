@@ -28,6 +28,7 @@ class cBaseTypeNode : public cDeclNode
         virtual bool IsInt()   { return !m_isFloat; }
         virtual bool IsChar()  { return (!m_isFloat && m_size==1); }
         virtual bool IsType()  { return true; }
+        virtual int NumDecls() { return 1; }
 
         // return the symbol for the type
         virtual cDeclNode *GetType() { return this; }
@@ -50,6 +51,5 @@ class cBaseTypeNode : public cDeclNode
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
     protected:
         string m_name;
-        int    m_size;
         bool   m_isFloat;
 };

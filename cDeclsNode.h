@@ -28,14 +28,34 @@ class cDeclsNode : public cAstNode
             AddChild(decl);
         }
 
-        int NumDecls() { return NumChildren(); }
+        int NumDecls() 
+        { 
+            int numDecls = 0;
+            for (auto it = FirstChild(); it != LastChild(); it++)
+            {
+                numDecls += dynamic_cast<cDeclNode*>(*it)->NumDecls();
+            }
+            return numDecls;
+        }
 
         cDeclNode *GetDecl(int index)
         {
             return (cDeclNode *)GetChild(index);
         }
-
+        void SetSize(int size) { m_size = size;}
+        int GetSize() { return m_size; }
         // return the XML node name
+        virtual string AttributesToString()
+        {
+            string result("");
+            if (m_size != 0)
+            {
+                result += " size=\"" + std::to_string(m_size) + "\"";
+            }
+            return result;
+        }
         virtual string NodeType() { return string("decls"); }
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
+    protected:
+        int m_size;
 };

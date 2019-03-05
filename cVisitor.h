@@ -25,6 +25,8 @@ class cVarDeclNode;
 class cVarExprNode;
 class cWhileNode;
 
+class cParamsNode;
+
 class cVisitor
 {
     public:
@@ -46,6 +48,7 @@ class cVisitor
         virtual void Visit(cIntExprNode *node);
         virtual void Visit(cOpNode *node);
         virtual void Visit(cParamListNode *node);
+        virtual void Visit(cParamsNode *node);
         virtual void Visit(cPrintNode *node);
         virtual void Visit(cReturnNode *node);
         virtual void Visit(cStmtNode *node);

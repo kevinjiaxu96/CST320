@@ -24,6 +24,7 @@ class cFuncDeclNode : public cDeclNode
         cFuncDeclNode(cSymbol *type, cSymbol *name)
             : cDeclNode()
         {
+            m_paramSize = 0;
             AddChild(type);
             AddChild(name);
             AddChild(nullptr);          // params
@@ -71,6 +72,7 @@ class cFuncDeclNode : public cDeclNode
                 g_SymbolTable.Insert(name);
             }
         }
+
 
         // Add formal params to the declaration
         void AddParams(cDeclsNode *params)
@@ -150,6 +152,7 @@ class cFuncDeclNode : public cDeclNode
 
         virtual bool IsFunc() { return true; }
         bool IsFullyDefined() { return m_isDefinition; }
+        virtual int NumDecls() { return 1; }
 
         // Return symbol of the type of declaration. 
         // Since this IS a type (in a sense), return self
@@ -168,6 +171,13 @@ class cFuncDeclNode : public cDeclNode
             return name->GetName(); 
         }
 
+        virtual cSymbol* GetNameSym()
+        {
+            return dynamic_cast<cSymbol*>(GetChild(1));
+        }
+        virtual void SetParamSize(int size) { m_paramSize = size; }
+        virtual int GetParamSize() { return m_paramSize; }
+
         // Return a string representation of the node
         virtual string NodeType() { return string("func"); }
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
@@ -175,4 +185,5 @@ class cFuncDeclNode : public cDeclNode
         bool        m_isDefinition;     // flag indicating this is a definition,
                                         // not just a declaration
         bool        m_hasParams;        // params have been set
+        int         m_paramSize;        // size of param list
 };

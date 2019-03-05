@@ -49,7 +49,10 @@ class cSymbol : public cAstNode
 
             return result;
         }
-
+        int  GetSize()              { return m_size; }
+        void SetSize(int size)      { m_size = size; }
+        int GetOffset()             { return m_offset; }
+        void SetOffset(int offset)  { m_offset = offset; }
         virtual string NodeType() { return string("sym"); }
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
     protected:
@@ -57,4 +60,6 @@ class cSymbol : public cAstNode
         long long m_id;                 // Unique ID for this symbol
         string m_name;                  // name of symbol
         cDeclNode *m_decl;              // The declaration that defines this sym
+        int m_size;                     // size of symbol
+        int m_offset;                   // memory offset of symbol
 };

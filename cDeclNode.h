@@ -15,15 +15,25 @@
 class cDeclNode : public cAstNode
 {
     public:
-        cDeclNode() : cAstNode() {}
+        cDeclNode() : cAstNode(), m_size(0), m_offset(0) {}
 
         // return the decl for the type of the thing this node represents
         virtual cDeclNode *GetType() = 0;
         virtual cDeclNode *GetType(int depth) { return GetType(); }
         virtual cDeclNode *GetBaseType() { return GetType(); }
 
+        virtual int NumDecls() = 0;
+
         // return the name of the item that is declared
         virtual string  GetName() = 0;
+        virtual int NumParams()  { return 0; }
+        virtual int GetParamSize() { return 0; }
+        virtual int  Sizeof()  { return GetType()->Sizeof(); }
+
+        virtual int GetSize() { return m_size; }
+        virtual int GetOffset() { return m_offset; }
+        virtual void SetSize(int size) { m_size = size; }
+        virtual void SetOffset(int offset) { m_offset = offset; }
 
         // virtual functions to define what kind of decl this is.
         // subclasses should override the appropriate functions.
@@ -35,7 +45,6 @@ class cDeclNode : public cAstNode
         virtual bool IsFloat()  { return false; }
         virtual bool IsInt()    { return false; }
         virtual bool IsChar()   { return false; }
-        virtual int  Sizeof()   { return 0; }
         virtual string NodeType() { return string("decl"); }
         bool IsCompatibleWith(cDeclNode *decl)
         {
@@ -48,4 +57,7 @@ class cDeclNode : public cAstNode
             return false;
         }
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
+    protected:
+        int m_offset;
+        int m_size;
 };

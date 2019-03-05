@@ -17,6 +17,7 @@
 #include "cDeclsNode.h"
 #include "cSymbol.h"
 #include "cSymbolTable.h"
+#include "lex.h"
 
 class cArrayDeclNode : public cDeclNode
 {
@@ -73,6 +74,7 @@ class cArrayDeclNode : public cDeclNode
 
         virtual bool IsArray() { return true; }
         virtual bool IsType()  { return true; }
+        virtual int NumDecls() { return 1; }
 
         virtual cDeclNode *GetBaseType()
         {

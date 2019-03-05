@@ -74,8 +74,6 @@ class cSymbolTable
         {
             cSymbol *sym = nullptr;
 
-            list<symbolTable_t *>::iterator it = m_SymbolTable.begin();
-
             for (auto it : m_SymbolTable)
             {
                 sym = FindInTable(it, name);

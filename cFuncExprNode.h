@@ -24,6 +24,7 @@ class cFuncExprNode : public cExprNode
         cFuncExprNode(cSymbol *name, cParamListNode *params)
             : cExprNode()
         {
+            m_paramSize = 0;
             AddChild(name);
             AddChild(params);
 
@@ -85,8 +86,23 @@ class cFuncExprNode : public cExprNode
             return sym->GetDecl()->GetType();
         }
 
+        cSymbol* GetNameSym()
+        {
+            return dynamic_cast<cSymbol*>(GetChild(1));
+        }
+
+        string GetName()
+        {
+            cSymbol* sym = dynamic_cast<cSymbol*>(GetChild(1));
+            return sym->GetName();
+        }
+
+        virtual int GetParamSize() { return m_paramSize; }
+        virtual void SetParamSize(int size) { m_paramSize = size; }
 
         // return string representation of the node
         virtual string NodeType() { return string("funcCall"); }
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
+    protected:
+        int m_paramSize;
 };

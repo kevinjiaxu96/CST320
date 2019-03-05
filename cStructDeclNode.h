@@ -59,6 +59,7 @@ class cStructDeclNode : public cDeclNode
 
         virtual bool IsStruct() { return true; }
         virtual bool IsType()   { return true; }
+        virtual int NumDecls() { return 1; }
 
         // return the symbol for the declaration of the type.
         // Since this IS a type, return our self

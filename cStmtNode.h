@@ -18,5 +18,4 @@ class cStmtNode : public cAstNode
 {
     public:
         cStmtNode() : cAstNode() {}
-        virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
 };

@@ -26,6 +26,8 @@ class cVarExprNode : public cExprNode
         cVarExprNode(cSymbol *name)
             : cExprNode()
         {
+            m_size = 0;
+            m_offset = 0;
             cSymbol *sym = g_SymbolTable.Find(name->GetName());
             if (sym == nullptr)
             {
@@ -79,7 +81,10 @@ class cVarExprNode : public cExprNode
             else
                 AddChild(index);
         }
-
+        cSymbol* GetNameSymbol() 
+        { 
+            return dynamic_cast<cSymbol*>(GetChild(0));
+        }
         // return a string representation of the name of the var
         virtual string GetName()
         {
@@ -162,8 +167,24 @@ class cVarExprNode : public cExprNode
 
             return sym->GetDecl();
         }
-
+        void SetSize(int size) { m_size = size;}
+        int GetSize() { return m_size; }
+        void SetOffset(int offset) { m_offset = offset; }
+        int GetOffset() { return m_offset; }
+        virtual string AttributesToString()
+        {
+            string result("");
+            if (m_size != 0 || m_offset != 0)
+            {
+                result += " size=\"" + std::to_string(m_size) + "\"" +
+                          " offset=\"" + std::to_string(m_offset) + "\"";
+            }
+            return result;
+        }
         // return a string representation of the node
         virtual string NodeType() { return string("varref"); }
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
+    protected:
+        int m_size;
+        int m_offset;
 };
