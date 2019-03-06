@@ -20,8 +20,8 @@ class cSizeComputer : public cVisitor
         cSizeComputer() : cVisitor()
         { 
             m_offset = 0;
-            m_size = 0;
-            m_isParams = false;
+            m_highwater = 0;
+            is_Params = false;
         }
         virtual void VisitAllNodes(cAstNode* node) 
         { 
@@ -30,96 +30,89 @@ class cSizeComputer : public cVisitor
         virtual void Visit(cBlockNode *node)
         {
             int old_offset = m_offset;
-            int old_size = m_size;
-            m_size = 0;
             VisitAllChildren(node);
-            node->SetSize(RoundUp(m_size));
+            if (m_highwater > 0 && old_offset == 0)
+            {
+                node->SetSize(m_highwater);
+            }
+            else
+            {
+                node->SetSize(m_offset - old_offset);
+            }
             m_offset = old_offset;
-            m_size = old_size;
         }
         virtual void Visit(cVarDeclNode* node)
         {
             cDeclNode *type = node->GetType();
             int size = type->Sizeof();
-            node->SetSize(RoundUp(size));
-            node->SetOffset(RoundUp(m_offset));
+            node->SetSize(size);
+            if (size > 1)
+                node->SetOffset(RoundUp(m_offset));
+            else
+                node->SetOffset(m_offset);
             cSymbol *var = nullptr;
             for (int i = 0; i < node->NumDecls(); ++i)
             {
                 var = node->GetVar(i);
-                var->SetSize(size);
-                if (size > 1 || m_isParams) {
-                    m_size = RoundUp(m_size);
+                if (size > 1) {
                     m_offset = RoundUp(m_offset);
                 }
+                var->SetSize(size);
                 var->SetOffset(m_offset);
-                if (m_isParams)
-                {
-                    m_offset -= size;
-                    m_size += size;
-                }
-                else
-                {
-                    m_offset += size;
-                    m_size += size;
-                }
+                m_offset += size;
             }
         }
         virtual void Visit(cDeclsNode* node)
         {
+            int old_offset = m_offset;
             VisitAllChildren(node);
-            node->SetSize(m_size);
+            node->SetSize(m_offset - old_offset);
         }
-        // virtual void Visit(cFuncDeclNode *node)
-        // {
-        //     int old_offset = m_offset;
-        //     cSymbol *name = node->GetNameSym();
-        //     name->SetOffset(0);
-        //     name->SetSize(node->GetType()->Sizeof());
-        //     cDeclsNode *params = node->GetParams();
-        //     if (params != nullptr)
-        //     {
-        //         m_offset = -12;
-        //         m_isParams = true;
-        //         VisitAllChildren(params);
-        //         node->SetParamSize(-(RoundUp(m_offset) + 12));
-        //         m_isParams;
-        //     }
-        //     cStmtsNode *stmts = node->GetStmts();
-        //     if (stmts != nullptr)
-        //     {
-        //         m_offset = 4;
-        //         stmts->Visit(this);
-        //     }
-        //     m_offset = old_offset;
-        // }
-        virtual void Visit(cFuncExprNode *node)
+        virtual void Visit(cStmtsNode* node)
         {
-            cSymbol *name = node->GetNameSym();
-            if (name != nullptr)
-            {
-                node->SetParamSize(name->GetDecl()->GetParamSize());
-            }
+            VisitAllChildren(node);
+            if (m_offset > m_highwater)
+                m_highwater = m_offset;
+        }
+        virtual void Visit(cFuncDeclNode* node)
+        {
+            int old_offset = m_offset;
+            m_offset = 0;
+            VisitAllChildren(node);
+            is_Params = false;
+            node->SetSize(RoundUp(m_highwater));
+            m_offset = old_offset;
+        }
+        virtual void Visit(cStructDeclNode *node)
+        {
+            int old_offset = m_offset;
+            node->SetOffset(0);
+            m_offset = 0;
+            VisitAllChildren(node);
+            node->SetSize(node->Sizeof());
+            m_offset = old_offset;
+        }
+        virtual void Visit(cParamsNode *node)
+        {
+            VisitAllChildren(node);
+            node->SetSize(RoundUp(m_offset));
+        }
+        virtual void Visit(cVarExprNode *node)
+        {
+            cSymbol *sym = node->GetNameSymbol();
+            node->SetSize( sym->GetSize() );
+            node->SetOffset( sym->GetOffset() );
+            
             VisitAllChildren(node);
         }
-        // virtual void Visit(cVarExprNode *node)
-        // {
-        //     cSymbol *sym = node->GetNameSymbol();
-        //     node->SetSize(sym->GetSize());
-        //     node->SetOffset(sym->GetOffset());
-        //     VisitAllChildren(node);
-        // }
     protected:
         int m_offset;
-        int m_size;
-        bool m_isParams;
+        int m_highwater;
+        bool is_Params;
 
         int RoundUp(int value)
         {
             if (value % WORD_SIZE == 0) return value;
-            if (m_isParams)
-                return value - WORD_SIZE - value % WORD_SIZE;
-            else
-                return value + WORD_SIZE - value % WORD_SIZE;
+            return value + WORD_SIZE - value % WORD_SIZE;
         }
 };

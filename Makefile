@@ -8,7 +8,7 @@
 ##
 ## Date: Nov. 28, 2015
 ##
-
+TAR_FILE=lab6_jiawei_xu.tar
 COPTS=-Wall -g -c  -O0 -std=c++11
 OBJS=main.o \
 	 langlex.o \
@@ -25,6 +25,7 @@ clean:
 	rm -f lang
 	rm -f out.xml
 	rm -f out2.xml
+	rm -rf *.tar
 
 .cpp.o:
 	g++ $(COPTS) $? -o $@
@@ -46,4 +47,7 @@ langparse.c: lang.y
 
 lang: $(OBJS)
 	g++ $(OBJS) -o lang
+
+tar:
+	tar -cvf $(TAR_FILE) *.[h] *.cpp *.[l] *.[y] [mM]akefile
 

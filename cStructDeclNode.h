@@ -15,8 +15,10 @@
 #include "cAstNode.h"
 #include "cDeclNode.h"
 #include "cDeclsNode.h"
+#include "cVarDeclNode.h"
 #include "cSymbol.h"
 #include "cSymbolTable.h"
+#include <iostream>
 
 class cStructDeclNode : public cDeclNode
 {
@@ -80,7 +82,31 @@ class cStructDeclNode : public cDeclNode
             cSymbol* field = cSymbolTable::FindInTable(m_symTbl, name);
             return field;
         }
-        
+        virtual int Sizeof() 
+        { 
+            int size = 0;
+            for (auto it = m_symTbl->begin(); it != m_symTbl->end(); it++)
+            {
+                cVarDeclNode *decl = dynamic_cast<cVarDeclNode*>(it->second->GetDecl());
+                cSymbol *var = nullptr;
+                for (int i = 0; i < decl->NumDecls(); ++i)
+                {
+                    var = decl->GetVar(i-1);
+                    size += var->GetDecl()->GetSize();
+                }
+            }
+            return size;
+        }
+        virtual string AttributesToString()
+        {
+            string result("");
+            if (m_size != 0 || m_offset != 0)
+            {
+                result += " size=\"" + std::to_string(m_size) + "\"" +
+                          " offset=\"" + std::to_string(m_offset) + "\"";
+            }
+            return result;
+        }
         // return a string representation of the struct
         virtual string NodeType()   { return string("struct_decl"); }
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }

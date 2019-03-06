@@ -175,6 +175,16 @@ class cFuncDeclNode : public cDeclNode
         {
             return dynamic_cast<cSymbol*>(GetChild(1));
         }
+        virtual string AttributesToString()
+        {
+            string result("");
+            if (m_size != 0 || m_offset != 0)
+            {
+                result += " size=\"" + std::to_string(m_size) + "\"" +
+                          " offset=\"" + std::to_string(m_offset) + "\"";
+            }
+            return result;
+        }
         virtual void SetParamSize(int size) { m_paramSize = size; }
         virtual int GetParamSize() { return m_paramSize; }
 
