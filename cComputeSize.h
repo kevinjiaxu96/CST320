@@ -59,7 +59,8 @@ class cComputeSize : public cVisitor
         {
             int old_offset = m_offset;
             VisitAllChildren(node);
-            m_offset -= (m_offset-old_offset);
+            if (old_offset > 0)
+                m_offset -= (m_offset-old_offset);
             node->SetSize(m_offset - old_offset);
         }
         // virtual void Visit(cStmtsNode* node)
