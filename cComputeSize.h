@@ -35,7 +35,7 @@ class cComputeSize : public cVisitor
         {
             int old_offset = m_offset;
             VisitAllChildren(node);
-            if (m_offset > m_highwater)
+            if (m_offset < m_highwater && old_offset > 0)
                 node->SetSize(m_offset - old_offset);
             else 
                 node->SetSize(m_highwater - old_offset);
@@ -69,8 +69,7 @@ class cComputeSize : public cVisitor
             VisitAllChildren(node);
             if (m_offset > m_highwater)
                 m_highwater = m_offset;
-            m_offset -= old_offset;
-            node->SetSize(m_offset);
+            node->SetSize(m_offset - old_offset);
         }
         // virtual void Visit(cStmtsNode* node)
         // {
@@ -78,29 +77,38 @@ class cComputeSize : public cVisitor
         //     if (m_offset > m_highwater)
         //         m_highwater = m_offset;
         // }
-        // virtual void Visit(cFuncDeclNode* node)
-        // {
-        //     int old_offset = m_offset;
-        //     m_offset = 0;
-        //     VisitAllChildren(node);
-        //     is_Params = false;
-        //     node->SetSize(RoundUp(m_highwater));
-        //     m_offset = old_offset;
-        // }
-        // virtual void Visit(cStructDeclNode *node)
-        // {
-        //     int old_offset = m_offset;
-        //     node->SetOffset(0);
-        //     m_offset = 0;
-        //     VisitAllChildren(node);
-        //     node->SetSize(node->Sizeof());
-        //     m_offset = old_offset;
-        // }
-        // virtual void Visit(cParamsNode *node)
-        // {
-        //     VisitAllChildren(node);
-        //     node->SetSize(RoundUp(m_offset));
-        // }
+        virtual void Visit(cFuncDeclNode* node)
+        {
+            int old_offset = m_offset;
+            m_offset = 0;
+            VisitAllChildren(node);
+            if (m_offset > m_highwater)
+                m_highwater = m_offset;
+            node->SetOffset(0);
+            node->SetSize(RoundUp(m_offset));
+            m_offset = old_offset;
+
+            // int old_offset = m_offset;
+            // m_offset = 0;
+            // VisitAllChildren(node);
+            // // is_Params = false;
+            // node->SetSize(RoundUp(m_highwater));
+            // m_offset = old_offset;
+        }
+        virtual void Visit(cStructDeclNode *node)
+        {
+            int old_offset = m_offset;
+            node->SetOffset(0);
+            m_offset = 0;
+            VisitAllChildren(node);
+            node->SetSize(m_offset);
+            m_offset = old_offset;
+        }
+        virtual void Visit(cParamsNode *node)
+        {
+            VisitAllChildren(node);
+            node->SetSize(RoundUp(m_offset));
+        }
         // virtual void Visit(cVarExprNode *node)
         // {
         //     cSymbol *sym = node->GetNameSymbol();
