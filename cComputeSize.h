@@ -1,6 +1,6 @@
 #pragma once
 //**************************************
-// cSizeComputer.h
+// cComputeSize.h
 //
 // Visitor implementation to compute size and offset of symbols, this class inherits from 
 // cVisitor
@@ -14,10 +14,10 @@
 
 #define WORD_SIZE 4
 
-class cSizeComputer : public cVisitor
+class cComputeSize : public cVisitor
 {
     public:
-        cSizeComputer() : cVisitor()
+        cComputeSize() : cVisitor()
         { 
             m_offset = 0;
             m_highwater = 0;
@@ -68,43 +68,43 @@ class cSizeComputer : public cVisitor
             VisitAllChildren(node);
             node->SetSize(m_offset - old_offset);
         }
-        virtual void Visit(cStmtsNode* node)
-        {
-            VisitAllChildren(node);
-            if (m_offset > m_highwater)
-                m_highwater = m_offset;
-        }
-        virtual void Visit(cFuncDeclNode* node)
-        {
-            int old_offset = m_offset;
-            m_offset = 0;
-            VisitAllChildren(node);
-            is_Params = false;
-            node->SetSize(RoundUp(m_highwater));
-            m_offset = old_offset;
-        }
-        virtual void Visit(cStructDeclNode *node)
-        {
-            int old_offset = m_offset;
-            node->SetOffset(0);
-            m_offset = 0;
-            VisitAllChildren(node);
-            node->SetSize(node->Sizeof());
-            m_offset = old_offset;
-        }
-        virtual void Visit(cParamsNode *node)
-        {
-            VisitAllChildren(node);
-            node->SetSize(RoundUp(m_offset));
-        }
-        virtual void Visit(cVarExprNode *node)
-        {
-            cSymbol *sym = node->GetNameSymbol();
-            node->SetSize( sym->GetSize() );
-            node->SetOffset( sym->GetOffset() );
+        // virtual void Visit(cStmtsNode* node)
+        // {
+        //     VisitAllChildren(node);
+        //     if (m_offset > m_highwater)
+        //         m_highwater = m_offset;
+        // }
+        // virtual void Visit(cFuncDeclNode* node)
+        // {
+        //     int old_offset = m_offset;
+        //     m_offset = 0;
+        //     VisitAllChildren(node);
+        //     is_Params = false;
+        //     node->SetSize(RoundUp(m_highwater));
+        //     m_offset = old_offset;
+        // }
+        // virtual void Visit(cStructDeclNode *node)
+        // {
+        //     int old_offset = m_offset;
+        //     node->SetOffset(0);
+        //     m_offset = 0;
+        //     VisitAllChildren(node);
+        //     node->SetSize(node->Sizeof());
+        //     m_offset = old_offset;
+        // }
+        // virtual void Visit(cParamsNode *node)
+        // {
+        //     VisitAllChildren(node);
+        //     node->SetSize(RoundUp(m_offset));
+        // }
+        // virtual void Visit(cVarExprNode *node)
+        // {
+        //     cSymbol *sym = node->GetNameSymbol();
+        //     node->SetSize( sym->GetSize() );
+        //     node->SetOffset( sym->GetOffset() );
             
-            VisitAllChildren(node);
-        }
+        //     VisitAllChildren(node);
+        // }
     protected:
         int m_offset;
         int m_highwater;

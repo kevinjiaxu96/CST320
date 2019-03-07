@@ -15,7 +15,7 @@
 class cDeclNode : public cAstNode
 {
     public:
-        cDeclNode() : cAstNode(), m_size(0), m_offset(0) {}
+        cDeclNode() : cAstNode(), m_offset(0), m_size(0) {}
 
         // return the decl for the type of the thing this node represents
         virtual cDeclNode *GetType() = 0;

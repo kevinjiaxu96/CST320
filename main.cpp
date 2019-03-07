@@ -14,7 +14,7 @@
 #include <iostream>
 #include <fstream>
 #include "cSymbolTable.h"
-#include "cSizeComputer.h"
+#include "cComputeSize.h"
 #include "lex.h"
 #include "astnodes.h"
 #include "langparse.h"
@@ -29,7 +29,6 @@ int main(int argc, char **argv)
     std::cout << "Jiawei Xu" << std::endl;
     const char *outfile_name;
     int result = 0;
-    cSizeComputer sizer;
     std::streambuf *cout_buf = std::cout.rdbuf();
 
     if (argc > 1)
@@ -66,6 +65,7 @@ int main(int argc, char **argv)
     {
         if (result == 0)
         {
+            cComputeSize sizer;
             sizer.VisitAllNodes(yyast_root);
             output << yyast_root->ToString() << std::endl;
         } else {
