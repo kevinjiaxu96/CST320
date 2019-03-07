@@ -41,7 +41,7 @@ class cComputeSize : public cVisitor
             cDeclNode *type = node->GetType();
             int size = type->Sizeof();
             node->SetSize(size);
-            node->SetOffset(m_offset);
+            node->SetOffset(RoundUp(m_offset));
             cSymbol *var = nullptr;
             for (int i = 0; i < node->NumDecls(); ++i)
             {
