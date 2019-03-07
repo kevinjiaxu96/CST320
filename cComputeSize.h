@@ -29,12 +29,10 @@ class cComputeSize : public cVisitor
         }
         virtual void Visit(cProgramNode *node)
         {
-            std::cout << "Program" << std::endl;
             VisitAllChildren(node);
         }
         virtual void Visit(cBlockNode *node)
         {
-            std::cout << "Block" << std::endl;
             VisitAllChildren(node);
             node->SetSize(m_offset);
         }
@@ -43,10 +41,7 @@ class cComputeSize : public cVisitor
             cDeclNode *type = node->GetType();
             int size = type->Sizeof();
             node->SetSize(size);
-            if (size > 1)
-                node->SetOffset(RoundUp(m_offset));
-            else
-                node->SetOffset(m_offset);
+            node->SetOffset(m_offset);
             cSymbol *var = nullptr;
             for (int i = 0; i < node->NumDecls(); ++i)
             {
@@ -61,9 +56,8 @@ class cComputeSize : public cVisitor
         }
         virtual void Visit(cDeclsNode* node)
         {
-            int old_offset = m_offset;
             VisitAllChildren(node);
-            node->SetSize(m_offset - old_offset);
+            node->SetSize(m_offset);
         }
         // virtual void Visit(cStmtsNode* node)
         // {
