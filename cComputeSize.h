@@ -40,8 +40,9 @@ class cComputeSize : public cVisitor
         {
             cDeclNode *type = node->GetType();
             int size = type->Sizeof();
+            m_offset = RoundUp(m_offset);
             node->SetSize(size);
-            node->SetOffset(RoundUp(m_offset));
+            node->SetOffset(m_offset);
             cSymbol *var = nullptr;
             for (int i = 0; i < node->NumDecls(); ++i)
             {
@@ -56,8 +57,11 @@ class cComputeSize : public cVisitor
         }
         virtual void Visit(cDeclsNode* node)
         {
+            int old_offset = m_offset;
             VisitAllChildren(node);
-            node->SetSize(m_offset);
+            m_offset -= (m_offset-old);
+            node->SetSize(m_offset - old);
+            node->SetOffset(m_offset);
         }
         // virtual void Visit(cStmtsNode* node)
         // {
