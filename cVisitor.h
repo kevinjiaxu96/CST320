@@ -1,5 +1,6 @@
 #pragma once
 
+class cProgramNode;
 class cAstNode;
 class cAstNode;
 class cAssignNode;
@@ -35,6 +36,7 @@ class cVisitor
         virtual void VisitAllNodes(cAstNode *node) = 0;
 
         virtual void Visit(cAstNode *node);
+        virtual void Visit(cProgramNode *node);
         virtual void Visit(cAssignNode *node);
         virtual void Visit(cBinaryExprNode *node);
         virtual void Visit(cBlockNode *node);
