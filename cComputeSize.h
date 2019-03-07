@@ -80,20 +80,17 @@ class cComputeSize : public cVisitor
         virtual void Visit(cFuncDeclNode* node)
         {
             int old_offset = m_offset;
+            int old_highwater = m_highwater;
+            cDeclsNode *params = node->GetParams();
+            if (params != nullptr)
+                is_Params = true;
             m_offset = 0;
             VisitAllChildren(node);
-            if (m_offset > m_highwater)
-                m_highwater = m_offset;
             node->SetOffset(0);
-            node->SetSize(RoundUp(m_offset));
+            node->SetSize(RoundUp(m_highwater));
             m_offset = old_offset;
-
-            // int old_offset = m_offset;
-            // m_offset = 0;
-            // VisitAllChildren(node);
-            // // is_Params = false;
-            // node->SetSize(RoundUp(m_highwater));
-            // m_offset = old_offset;
+            m_highwater = old_highwater;
+            is_Params = false;
         }
         virtual void Visit(cStructDeclNode *node)
         {
