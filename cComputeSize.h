@@ -35,7 +35,10 @@ class cComputeSize : public cVisitor
         {
             int old_offset = m_offset;
             VisitAllChildren(node);
-            node->SetSize(m_highwater - old_offset);
+            if (m_offset > m_highwater)
+                node->SetSize(m_offset - old_offset);
+            else 
+                node->SetSize(m_highwater - old_offset);
             m_offset = old_offset;
         }
         virtual void Visit(cVarDeclNode* node)
