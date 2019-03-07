@@ -33,8 +33,10 @@ class cComputeSize : public cVisitor
         }
         virtual void Visit(cBlockNode *node)
         {
+            int old_offset = m_offset;
             VisitAllChildren(node);
             node->SetSize(m_offset);
+            m_offset = old_offset;
         }
         virtual void Visit(cVarDeclNode* node)
         {
@@ -50,6 +52,7 @@ class cComputeSize : public cVisitor
                 if (size > 1) {
                     m_offset = RoundUp(m_offset);
                 }
+
                 var->SetSize(size);
                 var->SetOffset(m_offset);
                 m_offset += size;
@@ -59,9 +62,8 @@ class cComputeSize : public cVisitor
         {
             int old_offset = m_offset;
             VisitAllChildren(node);
-            if (old_offset > 0)
-                m_offset -= (m_offset-old_offset);
-            node->SetSize(m_offset - old_offset);
+            m_offset -= old_offset;
+            node->SetSize(m_offset);
         }
         // virtual void Visit(cStmtsNode* node)
         // {
