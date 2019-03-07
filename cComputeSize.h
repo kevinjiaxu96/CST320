@@ -6,7 +6,7 @@
 // cVisitor
 //
 // Author: Jiawei Xu 
-//
+// b cComputeSize.h:
 
 #include "astnodes.h"
 #include "cVisitor.h"
@@ -34,9 +34,11 @@ class cComputeSize : public cVisitor
         virtual void Visit(cBlockNode *node)
         {
             int old_offset = m_offset;
+            int old_highwater = m_highwater;
             VisitAllChildren(node);
-            node->SetSize(m_offset);
+            node->SetSize(m_highwater - old_offset);
             m_offset = old_offset;
+            m_highwater = old_highwater;
         }
         virtual void Visit(cVarDeclNode* node)
         {
@@ -62,6 +64,8 @@ class cComputeSize : public cVisitor
         {
             int old_offset = m_offset;
             VisitAllChildren(node);
+            if (m_offset > m_highwater)
+                m_highwater = m_offset;
             m_offset -= old_offset;
             node->SetSize(m_offset);
         }
