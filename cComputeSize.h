@@ -27,19 +27,16 @@ class cComputeSize : public cVisitor
         { 
             node->Visit(this); 
         }
+        virtual void Visit(cProgramNode *node)
+        {
+            std::cout << "Program" << std::endl;
+            VisitAllChildren(node);
+        }
         virtual void Visit(cBlockNode *node)
         {
-            int old_offset = m_offset;
+            std::cout << "Block" << std::endl;
             VisitAllChildren(node);
-            if (m_highwater > 0 && old_offset == 0)
-            {
-                node->SetSize(m_highwater);
-            }
-            else
-            {
-                node->SetSize(m_offset - old_offset);
-            }
-            m_offset = old_offset;
+            node->SetSize(m_offset);
         }
         virtual void Visit(cVarDeclNode* node)
         {
