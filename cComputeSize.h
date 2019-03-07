@@ -34,19 +34,19 @@ class cComputeSize : public cVisitor
         virtual void Visit(cBlockNode *node)
         {
             int old_offset = m_offset;
-            int old_highwater = m_highwater;
             VisitAllChildren(node);
             node->SetSize(m_highwater - old_offset);
             m_offset = old_offset;
-            m_highwater = old_highwater;
         }
         virtual void Visit(cVarDeclNode* node)
         {
             cDeclNode *type = node->GetType();
             int size = type->Sizeof();
-            m_offset = RoundUp(m_offset);
             node->SetSize(size);
-            node->SetOffset(m_offset);
+            if (size > 1)
+                node->SetOffset(RoundUp(m_offset));
+            else
+                node->SetOffset(m_offset);
             cSymbol *var = nullptr;
             for (int i = 0; i < node->NumDecls(); ++i)
             {
