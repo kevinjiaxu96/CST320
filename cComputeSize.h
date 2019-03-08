@@ -46,10 +46,14 @@ class cComputeSize : public cVisitor
         {
             int old_offset = m_offset;
             VisitAllChildren(node);
-            if (m_offset < m_highwater && old_offset > 0)
-                node->SetSize(m_offset - old_offset);
-            else 
-                node->SetSize(m_highwater - old_offset);
+            int offset = m_offset;
+            if (offset < m_highwater && old_offset > 0)
+                offset = m_offset - old_offset;
+            else
+                offset = m_highwater - old_offset;
+            if (offset < 0)
+                offset = 0;
+            node->SetSize(offset);
             m_offset = old_offset;
         }
         /*************************************************************************
@@ -83,6 +87,8 @@ class cComputeSize : public cVisitor
         {
             cDeclNode *type = node->GetType();
             int size = type->Sizeof();
+            if (type->IsStruct())
+                size = type->GetSize();
             node->SetSize(size);
             if (size > 1)
                 m_offset = RoundUp(m_offset);
@@ -163,10 +169,22 @@ class cComputeSize : public cVisitor
         }
         virtual void Visit(cVarExprNode *node)
         {
-            cSymbol *sym = node->GetNameSymbol();
+            cSymbol *sym = nullptr;
+            int offset = 0;
             VisitAllChildren(node);
-            node->SetSize( sym->GetSize());
-            node->SetOffset( sym->GetOffset());
+            for(auto it = node->FirstChild(); it != node->LastChild(); it++)
+            {
+                sym = dynamic_cast<cSymbol*>((*it));
+                if (sym != nullptr)
+                {
+                    offset += sym->GetOffset();
+                }
+                if (it == node->LastChild() - 1)
+                {
+                    node->SetSize(sym->GetSize());
+                }
+            }
+            node->SetOffset(offset);
         }
     protected:
         int m_offset;       // Current offset

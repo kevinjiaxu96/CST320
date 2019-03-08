@@ -50,11 +50,11 @@ class cOpNode : public cAstNode
         }
         virtual string AttributesToString()   
         { 
-            string result(" value='");
+            string result(" value=\"");
 
             result += GetOpAsString();
 
-            result += "'";
+            result += "\"";
 
             return result;
         }

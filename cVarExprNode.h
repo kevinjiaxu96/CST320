@@ -85,6 +85,10 @@ class cVarExprNode : public cExprNode
         { 
             return dynamic_cast<cSymbol*>(GetChild(0));
         }
+        cSymbol* GetLastChild()
+        {
+            return dynamic_cast<cSymbol*>(*(LastChild()));
+        }
         // return a string representation of the name of the var
         virtual string GetName()
         {
