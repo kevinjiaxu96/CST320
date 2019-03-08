@@ -21,12 +21,23 @@ class cComputeSize : public cVisitor
         { 
             m_offset = 0;
             m_highwater = 0;
-            is_Params = false;
         }
+        /*************************************************************************
+        * Name: VisitAllNodes
+        * Parameter: cAstNode
+        * Description:
+        *   Visit cAstNode node
+        *************************************************************************/
         virtual void VisitAllNodes(cAstNode* node) 
         { 
             node->Visit(this); 
         }
+        /*************************************************************************
+        * Name: Visit
+        * Parameter: cProgramNode
+        * Description:
+        *   Visit all program's child nodes to assign size/offsets.
+        *************************************************************************/
         virtual void Visit(cProgramNode *node)
         {
             VisitAllChildren(node);
@@ -41,28 +52,54 @@ class cComputeSize : public cVisitor
                 node->SetSize(m_highwater - old_offset);
             m_offset = old_offset;
         }
+        /*************************************************************************
+        * Name: Visit
+        * Parameter: cSymbol
+        * Description:
+        *   Set the size/offset of the variable symbol node to the size of the
+        *   type then increment the current offset.
+        * 
+        *   if type is not a char then we need to word align the current offset.
+        *************************************************************************/
+        virtual void Visit(cSymbol* node)
+        {
+            int offset = node->GetDecl()->GetOffset();
+            int size = node->GetDecl()->GetSize();
+            node->SetOffset(offset);
+            node->SetSize(size);
+            m_offset += offset;
+        }
+        /*************************************************************************
+        * Name: Visit
+        * Parameter: cVarDeclNode
+        * Description:
+        *   Set the size/offset of the variable declaring node to the size of the
+        *   type then loop all its child nodes.
+        * 
+        *   If the type size is more than a char then we need to word align the
+        *   offset.
+        *************************************************************************/
         virtual void Visit(cVarDeclNode* node)
         {
             cDeclNode *type = node->GetType();
             int size = type->Sizeof();
             node->SetSize(size);
             if (size > 1)
-                node->SetOffset(RoundUp(m_offset));
-            else
-                node->SetOffset(m_offset);
-            cSymbol *var = nullptr;
-            for (int i = 0; i < node->NumDecls(); ++i)
-            {
-                var = node->GetVar(i);
-                if (size > 1) {
-                    m_offset = RoundUp(m_offset);
-                }
-
-                var->SetSize(size);
-                var->SetOffset(m_offset);
-                m_offset += size;
-            }
+                m_offset = RoundUp(m_offset);
+            node->SetOffset(m_offset);
+            m_offset += size;
         }
+        /*************************************************************************
+        * Name: Visit
+        * Parameter: cDeclsNode
+        * Description:
+        *   Compute all its child decls size and offset then check if the stack
+        *   size is taller than the current high water mark, if so then we have
+        *   a new high water mark.
+        * 
+        *   Then set its size by using the current offset subtracting the old
+        *   offset to be relative of the current scope.
+        *************************************************************************/
         virtual void Visit(cDeclsNode* node)
         {
             int old_offset = m_offset;
@@ -71,27 +108,33 @@ class cComputeSize : public cVisitor
                 m_highwater = m_offset;
             node->SetSize(m_offset - old_offset);
         }
-        // virtual void Visit(cStmtsNode* node)
-        // {
-        //     VisitAllChildren(node);
-        //     if (m_offset > m_highwater)
-        //         m_highwater = m_offset;
-        // }
+        /*************************************************************************
+        * Name: Visit
+        * Parameter: cFuncDeclNode
+        * Description:
+        *   Compute all its child nodes' size and offset then resetting
+        *   the high water mark and the offset because they are only relative
+        *   to the function scope.
+        *************************************************************************/
         virtual void Visit(cFuncDeclNode* node)
         {
             int old_offset = m_offset;
             int old_highwater = m_highwater;
-            cDeclsNode *params = node->GetParams();
-            if (params != nullptr)
-                is_Params = true;
             m_offset = 0;
+            m_highwater = 0;
             VisitAllChildren(node);
             node->SetOffset(0);
             node->SetSize(RoundUp(m_highwater));
             m_offset = old_offset;
             m_highwater = old_highwater;
-            is_Params = false;
         }
+        /*************************************************************************
+        * Name: Visit
+        * Parameter: cStructDeclNode
+        * Description:
+        *   Compute all its child var decl sizes and offsets relative to the struct
+        *   then reset the current offset to the offset it began with.
+        *************************************************************************/
         virtual void Visit(cStructDeclNode *node)
         {
             int old_offset = m_offset;
@@ -101,24 +144,43 @@ class cComputeSize : public cVisitor
             node->SetSize(m_offset);
             m_offset = old_offset;
         }
+        /*************************************************************************
+        * Name: Visit
+        * Parameter: cParamsNode
+        * Description:
+        *   Compute all its child var decl sizes and offsets then set the size to 
+        *   the offset.
+        *************************************************************************/
         virtual void Visit(cParamsNode *node)
         {
-            VisitAllChildren(node);
-            node->SetSize(RoundUp(m_offset));
+            for(auto it = node->FirstChild(); it != node->LastChild(); it++)
+            {
+                cVarDeclNode* param = dynamic_cast<cVarDeclNode*>((*it));
+                Visit(param);
+                m_offset = RoundUp(m_offset);
+            }
+            node->SetSize(m_offset);
         }
-        // virtual void Visit(cVarExprNode *node)
-        // {
-        //     cSymbol *sym = node->GetNameSymbol();
-        //     node->SetSize( sym->GetSize() );
-        //     node->SetOffset( sym->GetOffset() );
-            
-        //     VisitAllChildren(node);
-        // }
+        virtual void Visit(cVarExprNode *node)
+        {
+            cSymbol *sym = node->GetNameSymbol();
+            VisitAllChildren(node);
+            node->SetSize( sym->GetSize());
+            node->SetOffset( sym->GetOffset());
+        }
     protected:
-        int m_offset;
-        int m_highwater;
-        bool is_Params;
-
+        int m_offset;       // Current offset
+        int m_highwater;    // Maximum stack size
+        /*************************************************************************
+        * Name: RoundUp
+        * Parameter: value
+        * Description:
+        *   Word Align the value.
+        * 
+        * PostCondition:
+        *   If value is already aligned, then return the value.
+        *   If value is not aligned, then return the next word aligned value.
+        *************************************************************************/
         int RoundUp(int value)
         {
             if (value % WORD_SIZE == 0) return value;
