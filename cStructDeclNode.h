@@ -84,18 +84,7 @@ class cStructDeclNode : public cDeclNode
         }
         virtual int Sizeof() 
         { 
-            int size = 0;
-            for (auto it = m_symTbl->begin(); it != m_symTbl->end(); it++)
-            {
-                cVarDeclNode *decl = dynamic_cast<cVarDeclNode*>(it->second->GetDecl());
-                cSymbol *var = nullptr;
-                for (int i = 0; i < decl->NumDecls(); ++i)
-                {
-                    var = decl->GetVar(i-1);
-                    size += var->GetDecl()->GetSize();
-                }
-            }
-            return size;
+            return 0;
         }
         virtual string AttributesToString()
         {

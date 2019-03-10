@@ -45,6 +45,7 @@ class cComputeSize : public cVisitor
         virtual void Visit(cBlockNode *node)
         {
             int old_offset = m_offset;
+            int old_highwater = m_highwater;
             VisitAllChildren(node);
             int offset = m_offset;
             if (offset < m_highwater && old_offset > 0)
@@ -166,6 +167,8 @@ class cComputeSize : public cVisitor
                 m_offset = RoundUp(m_offset);
             }
             node->SetSize(m_offset);
+            if (m_offset > m_highwater)
+                m_highwater = m_offset;
         }
         virtual void Visit(cVarExprNode *node)
         {

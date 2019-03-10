@@ -588,7 +588,7 @@
                                 <sym id="2" name="int"/>
                                 <sym id="29" name="f1"/>
                             </func>
-                            <func>
+                            <func size="4" offset="0">
                                 <sym id="2" name="int"/>
                                 <sym id="30" name="f2"/>
                                 <args size="4">
@@ -598,7 +598,7 @@
                                     </var_decl>
                                 </args>
                             </func>
-                            <func>
+                            <func size="12" offset="0">
                                 <sym id="3" name="float"/>
                                 <sym id="32" name="f3"/>
                                 <args size="12">
@@ -612,7 +612,7 @@
                                     </var_decl>
                                 </args>
                             </func>
-                            <func>
+                            <func size="4" offset="0">
                                 <sym id="2" name="int"/>
                                 <sym id="35" name="f4"/>
                                 <args size="4">
@@ -696,7 +696,7 @@
                         <sym id="2" name="int"/>
                         <sym id="42" name="foo"/>
                     </func>
-                    <func>
+                    <func size="4" offset="0">
                         <sym id="3" name="float"/>
                         <sym id="43" name="bar"/>
                         <args size="4">
@@ -710,7 +710,7 @@
                         <sym id="2" name="int"/>
                         <sym id="42" name="foo"/>
                     </func>
-                    <func>
+                    <func size="4" offset="0">
                         <sym id="3" name="float"/>
                         <sym id="43" name="bar"/>
                         <args size="4">
