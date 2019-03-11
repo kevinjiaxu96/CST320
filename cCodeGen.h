@@ -27,9 +27,14 @@ public:
     virtual void Visit(cProgramNode *node)
     {
         cBlockNode *block = node->GetBlock();
-        std::cout << block->ToString() << std::endl;
+        cDeclsNode *decls = block->GetDecls();
+        cStmtsNode *stmts = block->GetStmts();
+        if (decls != nullptr)
+            decls->Visit(this);
         EmitStringNL("main:");
-        VisitAllChildren(node);
+        if (stmts != nullptr)
+            stmts->Visit(this);
+        // VisitAllChildren(node);
     }
     virtual void Visit(cPrintNode *node)
     {

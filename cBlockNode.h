@@ -39,6 +39,8 @@ class cBlockNode : public cStmtNode
             }
             return result;
         }
+        cDeclsNode *GetDecls() { return dynamic_cast<cDeclsNode*>(GetChild(0)); }
+        cStmtsNode *GetStmts() { return dynamic_cast<cStmtsNode*>(GetChild(1)); }
         virtual string NodeType() { return string("block"); }
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
     protected:
