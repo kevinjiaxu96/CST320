@@ -27,18 +27,12 @@ public:
     void VisitAllNodes(cAstNode *node) { node->Visit(this); }
     virtual void Visit(cProgramNode *node)
     {
-        cBlockNode *block = node->GetBlock();
-        cDeclsNode *decls = block->GetDecls();
-        cStmtsNode *stmts = block->GetStmts();
-        if (decls != nullptr)
-            decls->Visit(this);
         EmitStringNL("main:");
-        if (stmts != nullptr)
-            stmts->Visit(this);
+        VisitAllChildren(node);
     }
     virtual void Visit(cPrintNode *node)
     {
-        // node->GetExpr()->Visit(this);
+        node->GetExpr()->Visit(this);
         EmitStringNL("CALL @print");
         EmitStringNL("POP");
         EmitStringNL("POP");
