@@ -31,7 +31,7 @@ public:
     }
     virtual void Visit(cPrintNode *node)
     {
-        std::cout << node->ToString() << std::endl;
+        std::cout << "PRINT" << std::endl;
         node->GetExpr()->Visit(this);
         EmitStringNL("CALL @print");
         EmitStringNL("POP");
@@ -39,6 +39,7 @@ public:
     }
     virtual void Visit(cIntExprNode *node)
     {
+        std::cout << "INT: " << std::endl;
         EmitString("PUSH ");
         EmitInt(node->GetValue());
         EmitStringNL("");
