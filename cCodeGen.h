@@ -27,7 +27,7 @@ public:
     void VisitAllNodes(cAstNode *node) { node->Visit(this); }
     virtual void Visit(cProgramNode *node)
     {
-        std::cout << node->GetExpr()->ToString() << std::endl;
+        std::cout << node->ToString() << std::endl;
         cBlockNode *block = node->GetBlock();
         cDeclsNode *decls = block->GetDecls();
         cStmtsNode *stmts = block->GetStmts();
