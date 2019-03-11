@@ -27,12 +27,13 @@ public:
     virtual void Visit(cProgramNode *node)
     {
         EmitStringNL("main:");
-        // VisitAllChildren(node);
+        VisitAllChildren(node);
     }
     virtual void Visit(cPrintNode *node)
     {
         std::cout << "PRINT" << std::endl;
-        node->GetExpr()->Visit(this);
+        // node->GetExpr()->Visit(this);
+        VisitAllChildren(node);
         EmitStringNL("CALL @print");
         EmitStringNL("POP");
         EmitStringNL("POP");
