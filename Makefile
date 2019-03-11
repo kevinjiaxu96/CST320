@@ -26,7 +26,8 @@ clean:
 	rm -f lang
 	rm -f out.xml
 	rm -f out2.xml
-	rm -rf *.tar
+	rm -f $(TAR_FILE)
+	rm -f langout.sl
 
 .cpp.o:
 	g++ $(COPTS) $? -o $@
