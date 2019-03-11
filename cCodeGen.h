@@ -39,7 +39,7 @@ public:
     {
         EmitString("PUSH ");
         EmitInt(node->GetValue());
-        EmitStringNL();
+        EmitStringNL("");
     }
     virtual void Visit(cFloatExprNode *node)
     {
