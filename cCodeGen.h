@@ -27,15 +27,21 @@ public:
     void VisitAllNodes(cAstNode *node) { node->Visit(this); }
     virtual void Visit(cProgramNode *node)
     {
+        cBlockNode *block = node->GetBlock();
         EmitStringNL("main:");
+        EmitString("ADJSP ");
+        EmitInt(block->GetSize());
+        EmitStringNL("");
         VisitAllChildren(node);
+        EmitStringNL("PUSH 0");
+        EmitStringNL("RETURNV");
     }
     virtual void Visit(cPrintNode *node)
     {
         node->GetExpr()->Visit(this);
         EmitStringNL("CALL @print");
         EmitStringNL("POP");
-        // EmitStringNL("POP");
+        EmitStringNL("POP");
     }
     virtual void Visit(cIntExprNode *node)
     {
