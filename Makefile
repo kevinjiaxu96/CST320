@@ -8,12 +8,13 @@
 ##
 ## Date: Nov. 28, 2015
 ##
-TAR_FILE=lab6_jiawei_xu.tar
+TAR_FILE=lab7_jiawei_xu.tar
 COPTS=-Wall -g -c  -O0 -std=c++11
 OBJS=main.o \
 	 langlex.o \
 	 langparse.o \
 	 cVisitor.o \
+	 emot.o \
 
 all: lang
 
@@ -37,6 +38,9 @@ main.o: main.cpp langparse.c langlex.c
 	g++ $(COPTS) main.cpp -o $@
 
 langlex.o: langlex.c
+	g++ $(COPTS) -Wno-sign-compare $? -o $@
+
+emit.o:	emit.cpp
 	g++ $(COPTS) -Wno-sign-compare $? -o $@
 
 langlex.c: lang.l langparse.c
