@@ -9,6 +9,7 @@
 
 #include "emit.h"
 #include "cVisitor.h"
+#include <iostream>
 
 class cCodeGen : public cVisitor
 {
@@ -30,6 +31,7 @@ public:
     }
     virtual void Visit(cPrintNode *node)
     {
+        std::cout << node->ToString() << std::endl;
         node->GetExpr()->Visit(this);
         EmitStringNL("CALL @print");
         EmitStringNL("POP");
