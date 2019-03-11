@@ -33,7 +33,7 @@ public:
     {
         std::cout << "PRINT" << std::endl;
         // node->GetExpr()->Visit(this);
-        VisitAllChildren(node);
+        // VisitAllChildren(node);
         EmitStringNL("CALL @print");
         EmitStringNL("POP");
         EmitStringNL("POP");
