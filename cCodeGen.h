@@ -27,7 +27,6 @@ public:
     void VisitAllNodes(cAstNode *node) { node->Visit(this); }
     virtual void Visit(cProgramNode *node)
     {
-        std::cout << node->ToString() << std::endl;
         cBlockNode *block = node->GetBlock();
         cDeclsNode *decls = block->GetDecls();
         cStmtsNode *stmts = block->GetStmts();
@@ -56,6 +55,7 @@ public:
     }
     virtual void Visit(cVarExprNode *node)
     {
+        VisitAllChildren(node);
         if (node->GetType()->IsChar())
             EmitStringNL("PUSHCVAR " + std::to_string(node->GetOffset()));
         else
