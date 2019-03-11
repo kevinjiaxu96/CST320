@@ -16,6 +16,7 @@
 #include "cAstNode.h"
 #include "cStmtNode.h"
 #include "cExprNode.h"
+#include "cDeclNode.h"
 
 class cPrintNode : public cStmtNode
 {
@@ -25,7 +26,7 @@ class cPrintNode : public cStmtNode
         {
             AddChild(expr);
         }
-
+        virtual cExprNode *GetExpr() { return dynamic_cast<cExprNode*>(GetChild(0));}
         // return a string representation of the node
         virtual string NodeType() { return string("print"); }
         virtual void Visit(cVisitor *visitor) { visitor->Visit(this); }
