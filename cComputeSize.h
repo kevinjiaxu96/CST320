@@ -7,6 +7,7 @@
 //
 // Author: Jiawei Xu 
 // b cComputeSize.h:
+// p m_offset - old_offset
 
 #include "astnodes.h"
 #include "cVisitor.h"
@@ -48,7 +49,7 @@ class cComputeSize : public cVisitor
             VisitAllChildren(node);
             int offset = m_offset;
             if (offset < m_highwater && old_offset > 0)
-                offset = m_offset - old_offset;
+                offset = offset - old_offset;
             else
                 offset = m_highwater - old_offset;
             if (offset < 0)
@@ -171,6 +172,7 @@ class cComputeSize : public cVisitor
         }
         virtual void Visit(cVarExprNode *node)
         {
+            int old_offset = m_offset;
             cSymbol *sym = nullptr;
             int offset = 0;
             VisitAllChildren(node);
@@ -187,6 +189,7 @@ class cComputeSize : public cVisitor
                 }
             }
             node->SetOffset(offset);
+            m_offset = old_offset;
         }
     protected:
         int m_offset;       // Current offset

@@ -546,7 +546,7 @@
                                     <sym id="25" name="aaa"/>
                                 </varref>
                             </print>
-                            <block size="11">
+                            <block size="6">
                                 <decls size="6">
                                     <var_decl size="4" offset="4">
                                         <sym id="2" name="int"/>
