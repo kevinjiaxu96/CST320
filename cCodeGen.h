@@ -60,6 +60,13 @@ public:
         else
             EmitStringNL("PUSHVAR " + std::to_string(node->GetOffset()));
     }
+    virtual void Visit(cAssignNode *node)
+    {
+        if (node->GetType()->IsChar())
+            EmitStringNL("POPCVAR " + std::to_string(node->GetOffset()));
+        else
+            EmitStringNL("POPVAR " + std::to_string(node->GetOffset()));
+    }
 protected:
     virtual void EmitStringNL(std::string str)
     {
