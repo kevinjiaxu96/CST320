@@ -39,6 +39,7 @@ public:
     {
         EmitString("PUSH ");
         EmitInt(node->GetValue());
+        EmitStringNL();
     }
     virtual void Visit(cFloatExprNode *node)
     {
@@ -50,4 +51,4 @@ protected:
         std::string toBeEmitted = str + "\n";
         EmitString(toBeEmitted);
     }
-};
+};slasm -list langoutout.sl io320.sl
