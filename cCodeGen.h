@@ -26,21 +26,20 @@ public:
     void VisitAllNodes(cAstNode *node) { node->Visit(this); }
     virtual void Visit(cProgramNode *node)
     {
+        cBlockNode *block = node->GetBlock();
+        std::cout << block->ToString() << std::endl;
         EmitStringNL("main:");
         VisitAllChildren(node);
     }
     virtual void Visit(cPrintNode *node)
     {
-        std::cout << "PRINT" << std::endl;
-        // node->GetExpr()->Visit(this);
-        // VisitAllChildren(node);
+        node->GetExpr()->Visit(this);
         EmitStringNL("CALL @print");
         EmitStringNL("POP");
         EmitStringNL("POP");
     }
     virtual void Visit(cIntExprNode *node)
     {
-        std::cout << "INT: " << std::endl;
         EmitString("PUSH ");
         EmitInt(node->GetValue());
         EmitStringNL("");
