@@ -1,6 +1,7 @@
 #!/bin/bash
 ./lang test/$1.lang langout
 RETVAL=$?
+echo $RETVAL
 if [ $RETVAL -ne 0 ] 
 then
   echo $1 FAILED ------- && exit

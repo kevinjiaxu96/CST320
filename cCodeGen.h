@@ -49,10 +49,6 @@ public:
         EmitInt(node->GetValue());
         EmitStringNL("");
     }
-    virtual void Visit(cFloatExprNode *node)
-    {
-
-    }
     virtual void Visit(cVarExprNode *node)
     {
         VisitAllChildren(node);
