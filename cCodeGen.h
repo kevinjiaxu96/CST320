@@ -38,7 +38,7 @@ public:
     }
     virtual void Visit(cPrintNode *node)
     {
-        node->GetExpr()->Visit(this);
+        // node->GetExpr()->Visit(this);
         EmitStringNL("CALL @print");
         EmitStringNL("POP");
         EmitStringNL("POP");
