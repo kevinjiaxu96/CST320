@@ -27,7 +27,7 @@ public:
     virtual void Visit(cProgramNode *node)
     {
         EmitStringNL("main:");
-        VisitAllChildren(node);
+        // VisitAllChildren(node);
     }
     virtual void Visit(cPrintNode *node)
     {
