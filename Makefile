@@ -28,6 +28,9 @@ clean:
 	rm -f out2.xml
 	rm -f $(TAR_FILE)
 	rm -f langout.sl
+	rm -f langout.slb
+	rm -f langout.lst
+	rm -f langout.dbg
 
 .cpp.o:
 	g++ $(COPTS) $? -o $@
