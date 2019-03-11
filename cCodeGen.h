@@ -22,7 +22,7 @@ public:
         FinalizeOutput();
     }
 
-    virtual void VisitAllNodes(cAssignNode *node) { node->Visit(this); }
+    void VisitAllNodes(cAstNode *node) { node->Visit(this); }
     virtual void Visit(cProgramNode *node)
     {
         EmitStringNL("main:");

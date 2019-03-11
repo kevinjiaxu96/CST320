@@ -33,7 +33,7 @@ class cVisitor
     public:
         cVisitor() {}
 
-        void VisitAllNodes(cAstNode *node) = 0;
+        virtual void VisitAllNodes(cAstNode *node) = 0;
 
         virtual void Visit(cAstNode *node);
         virtual void Visit(cProgramNode *node);
