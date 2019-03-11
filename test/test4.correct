@@ -1,9 +1,5 @@
-100
-64
-1
-2019
-61
-452
-112
-1922
-66;
+ERROR: Symbol ccc not defined on line 9
+ERROR: Symbol ccc not defined on line 21
+ERROR: Symbol bbb not defined on line 25
+ERROR: Symbol ccc not defined on line 26
+4 Errors in compile

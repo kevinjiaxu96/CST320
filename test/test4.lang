@@ -1,46 +1,27 @@
 program
 {
-    char x;
-    int y;
-    struct {
-        int a;
-        char b;
-    } zz;
-    x = 4;
-    y = 7;
+    int aaa;
     {
-        struct {
-            int a;
-        } cc;
-        int j;
-        int x;
-        char m;
-        j = 100;
-        m = 1;
-        x = 64
-        cc.a = 2019;
-        zz.a = 452;
-        zz.b = 66;
-        print(j);
-        print(x);
-        print(m);
-        print(cc.a);
-        x = 112;
-        y = 1922;
-    }
-    {
-        int y;
-        int foo(int num1, int num2)
+        int aaa;
+        int bbb;
+        aaa = 1;
+        bbb = 1;
+        ccc = 1;
         {
-            int z;
-            z = num1 + num2;
-            return z;
+            int aaa;
+            int bbb;
+            int ccc;
+
+            aaa = 1;
+            bbb = 1;
+            ccc = 1;
         }
-        y = foo(11, 50);
-        print(y);
-        print(zz.a);
+        aaa = 1;
+        bbb = 1;
+        ccc = 1;
     }
-    print(x);
-    print(y);
-    print(zz.b);
+
+    aaa = 1;
+    bbb = 1;
+    ccc = 1;
 }
