@@ -14,7 +14,7 @@ OBJS=main.o \
 	 langlex.o \
 	 langparse.o \
 	 cVisitor.o \
-	 emot.o \
+	 emit.o \
 
 all: lang
 
