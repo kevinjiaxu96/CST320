@@ -62,10 +62,12 @@ public:
     }
     virtual void Visit(cAssignNode *node)
     {
-        if (node->GetType()->IsChar())
-            EmitStringNL("POPCVAR " + std::to_string(node->GetOffset()));
+        node->GetExpr()->Visit(this);
+        cVarExprNode *varNode =node->GetExpr();
+        if (varNode->GetType()->IsChar())
+            EmitStringNL("POPCVAR " + std::to_string(varNode->GetOffset()));
         else
-            EmitStringNL("POPVAR " + std::to_string(node->GetOffset()));
+            EmitStringNL("POPVAR " + std::to_string(varNode->GetOffset()));
     }
 protected:
     virtual void EmitStringNL(std::string str)
