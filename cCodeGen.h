@@ -56,9 +56,9 @@ public:
     virtual void Visit(cVarExprNode *node)
     {
         if (node->GetType()->IsChar())
-            EmitStringNL("PUSHCVAR " + to_string(node->GetOffset()));
+            EmitStringNL("PUSHCVAR " + std::to_string(node->GetOffset()));
         else
-            EmitStringNL("PUSHVAR " + to_string(node->GetOffset()));
+            EmitStringNL("PUSHVAR " + std::to_string(node->GetOffset()));
     }
 protected:
     virtual void EmitStringNL(std::string str)
