@@ -47,12 +47,15 @@ class cComputeSize : public cVisitor
         {
             int old_offset = m_offset;
             int old_highwater = m_highwater;
+            m_highwater = 0;
             VisitAllChildren(node);
             int stack_height = m_highwater - old_offset;
             if (stack_height < 0)
                 stack_height = 0;
             node->SetSize(stack_height);
             m_offset = old_offset;
+            if (m_highwater < old_highwater)
+                m_highwater = old_highwater;
         }
         /*************************************************************************
         * Name: Visit
