@@ -9,6 +9,7 @@
 
 #include "emit.h"
 #include "cVisitor.h"
+#include <string>
 #include <iostream>
 
 class cCodeGen : public cVisitor
