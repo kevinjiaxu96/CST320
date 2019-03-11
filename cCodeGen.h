@@ -26,6 +26,7 @@ public:
     virtual void Visit(cProgramNode *node)
     {
         EmitStringNL("main:");
+        VisitAllNodes(node);
     }
     virtual void Visit(cPrintNode *node)
     {
@@ -36,7 +37,7 @@ public:
     }
     virtual void Visit(cIntExprNode *node)
     {
-        EmitString("PUSH ");
+        EmitStringNL("PUSH ");
         EmitInt(node->GetValue());
     }
     virtual void Visit(cFloatExprNode *node)
