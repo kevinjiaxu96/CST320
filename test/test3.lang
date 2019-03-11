@@ -1,0 +1,33 @@
+program
+{
+    char x;
+    int y;
+    x = 4;
+    y = 7;
+    {
+        int j;
+        int x;
+        char m;
+        j = 100;
+        m = 1;
+        x = 64
+        print(j);
+        print(x);
+        print(m);
+        x = 112;
+        y = 1922;
+    }
+    {
+        int y;
+        int foo(int num1, int num2)
+        {
+            int z;
+            z = num1 + num2;
+            return z;
+        }
+        y = foo(11, 50);
+        print(y)
+    }
+    print(x);
+    print(y);
+}

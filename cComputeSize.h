@@ -6,8 +6,6 @@
 // cVisitor
 //
 // Author: Jiawei Xu 
-// b cComputeSize.h:
-// p m_offset - old_offset
 
 #include "astnodes.h"
 #include "cVisitor.h"
