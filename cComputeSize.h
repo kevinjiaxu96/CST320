@@ -46,15 +46,12 @@ class cComputeSize : public cVisitor
         virtual void Visit(cBlockNode *node)
         {
             int old_offset = m_offset;
+            int old_highwater = m_highwater;
             VisitAllChildren(node);
-            int offset = m_offset;
-            if (offset < m_highwater && old_offset > 0)
-                offset = offset - old_offset;
-            else
-                offset = m_highwater - old_offset;
-            if (offset < 0)
-                offset = 0;
-            node->SetSize(offset);
+            int stack_height = m_highwater - old_offset;
+            if (stack_height < 0)
+                stack_height = 0;
+            node->SetSize(stack_height);
             m_offset = old_offset;
         }
         /*************************************************************************

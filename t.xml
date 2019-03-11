@@ -1,7 +1,7 @@
 <program>
-    <block size="16">
+    <block size="8">
         <stmts>
-            <block size="16">
+            <block size="4">
                 <stmts>
                     <block>
                         <stmts>
@@ -225,7 +225,7 @@
                             </while>
                         </stmts>
                     </block>
-                    <block size="16">
+                    <block>
                         <decls size="16">
                             <var_decl size="1" offset="0">
                                 <sym id="1" name="char"/>
@@ -310,7 +310,7 @@
                             </if>
                         </stmts>
                     </block>
-                    <block size="16">
+                    <block>
                         <decls size="16">
                             <var_decl size="1" offset="0">
                                 <sym id="1" name="char"/>
@@ -408,7 +408,7 @@
                             </if>
                         </stmts>
                     </block>
-                    <block size="16">
+                    <block>
                         <decls size="16">
                             <var_decl size="1" offset="0">
                                 <sym id="1" name="char"/>
@@ -529,7 +529,7 @@
                             </assign>
                         </stmts>
                     </block>
-                    <block size="16">
+                    <block size="8">
                         <decls size="2">
                             <var_decl size="1" offset="0">
                                 <sym id="1" name="char"/>
@@ -546,7 +546,7 @@
                                     <sym id="25" name="aaa"/>
                                 </varref>
                             </print>
-                            <block size="14">
+                            <block size="6">
                                 <decls size="6">
                                     <var_decl size="4" offset="4">
                                         <sym id="2" name="int"/>
@@ -578,7 +578,7 @@
                             </print>
                         </stmts>
                     </block>
-                    <block size="16">
+                    <block size="4">
                         <decls size="4">
                             <var_decl size="4" offset="0">
                                 <sym id="2" name="int"/>
@@ -682,7 +682,7 @@
                     </block>
                 </stmts>
             </block>
-            <block size="16">
+            <block size="8">
                 <decls size="8">
                     <var_decl size="4" offset="0">
                         <sym id="2" name="int"/>
