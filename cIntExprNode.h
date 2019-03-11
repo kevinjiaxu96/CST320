@@ -34,7 +34,7 @@ class cIntExprNode : public cExprNode
             else
                 return g_SymbolTable.Find("int")->GetDecl();
         }
-
+        virtual int GetValue() { return m_value; }
         // return a string representation of the integer constant
         virtual string NodeType() { return string("int"); }
         virtual string AttributesToString() 
