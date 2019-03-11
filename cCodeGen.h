@@ -49,4 +49,4 @@ protected:
         std::string toBeEmitted = str + "\n";
         EmitString(toBeEmitted);
     }
-}
+};
