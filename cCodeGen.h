@@ -34,7 +34,6 @@ public:
         EmitStringNL("main:");
         if (stmts != nullptr)
             stmts->Visit(this);
-        // VisitAllChildren(node);
     }
     virtual void Visit(cPrintNode *node)
     {
