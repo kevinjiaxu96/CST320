@@ -1,7 +1,7 @@
 program
 {
-    char x;
     int y;
+    char x;
     x = 4;
     y = 7;
     print(x);
