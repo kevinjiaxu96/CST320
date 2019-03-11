@@ -51,4 +51,4 @@ protected:
         std::string toBeEmitted = str + "\n";
         EmitString(toBeEmitted);
     }
-};slasm -list langoutout.sl io320.sl
+};
