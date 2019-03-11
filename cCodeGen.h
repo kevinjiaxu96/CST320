@@ -27,6 +27,7 @@ public:
     void VisitAllNodes(cAstNode *node) { node->Visit(this); }
     virtual void Visit(cProgramNode *node)
     {
+        std::cout << node->GetExpr()->ToString() << std::endl;
         cBlockNode *block = node->GetBlock();
         cDeclsNode *decls = block->GetDecls();
         cStmtsNode *stmts = block->GetStmts();
@@ -62,7 +63,6 @@ public:
     }
     virtual void Visit(cAssignNode *node)
     {
-        std::cout << node->GetExpr()->ToString() << std::endl;
         node->GetExpr()->Visit(this);
         cVarExprNode *varNode = node->GetExpr();
         if (varNode->GetType()->IsChar())
