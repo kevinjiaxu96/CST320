@@ -49,10 +49,18 @@ public:
         EmitInt(node->GetValue());
         EmitStringNL("");
     }
-    virtual void Visit(cAssignNode *node)
+    virtual void Visit(cVarExprNode *node)
     {
         VisitAllChildren(node);
-        cVarExprNode *varNode = node->GetExpr();
+        if (node->GetType()->IsChar())
+            EmitStringNL("PUSHCVAR " + std::to_string(node->GetOffset()));
+        else
+            EmitStringNL("PUSHVAR " + std::to_string(node->GetOffset()));
+    }
+    virtual void Visit(cAssignNode *node)
+    {
+        node->GetRVal()->Visit(this);
+        cVarExprNode *varNode = node->GetLVal();
         if (varNode->GetType()->IsChar())
             EmitStringNL("POPCVAR " + std::to_string(varNode->GetOffset()));
         else

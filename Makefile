@@ -61,3 +61,6 @@ tar:
 
 assem:
 	slasm –dbg -list langoutout.sl io320.sl
+
+push:
+	git add ./ && git commit -m "test" && git push
