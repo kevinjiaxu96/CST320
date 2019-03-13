@@ -4,15 +4,6 @@ program
     int y;
     x = 10;
     y = 2;
-    {
-        int y;
-        char z;
-
-        y = 30;
-        z = 65;
-        print(y);
-        print(z);
-    }
     print(x + y);
     print(x - y);
     print(x / y);

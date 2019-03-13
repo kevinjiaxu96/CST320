@@ -1,0 +1,16 @@
+program
+{
+    int a;
+    int b;
+    int foo(int a, int i)
+    {
+        return a + i;
+    }
+    b = 0;
+    while(b < 10)
+    {
+        a = foo(1, b);
+        print(a);
+        b = b + 1;
+    }
+}

@@ -11,13 +11,24 @@ program
         int a;
         int b;
     } bb_struct;
+    struct {
+        aa_struct a;
+        char b;
+        int c;
+    } cc_struct;
     bb_struct cc;
+    cc_struct dd;
     x = 10;
     y = 2;
+    dd.a.a = 65;
+    dd.a.b = 200;
+    dd.a.c = 10;
     {
         int y;
         char z;
         aa_struct m; 
+        dd.b = 66;
+        dd.c = 900;
         y = 30;
         z = 65;
         m.a = 4;
@@ -29,8 +40,13 @@ program
         print(m.a);
         print(m.b);
         print(m.c);
+        print(dd.a.a);
+        print(dd.a.b);
+        print(dd.a.c);
     }
     cc.b = 80;
+    print(dd.b);
+    print(dd.c;
     print(x + y);
     print(x - y);
     print(x / y);

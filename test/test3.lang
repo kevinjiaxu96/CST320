@@ -1,0 +1,9 @@
+program
+{
+    char x;
+    int y;
+    x = 10;
+    y = 2;
+    print(x);
+    print(y);
+}

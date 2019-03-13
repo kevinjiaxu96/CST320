@@ -1,4 +1,3 @@
-//Printing Basic integer
 program
 {
     print(1);

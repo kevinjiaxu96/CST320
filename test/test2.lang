@@ -1,11 +1,7 @@
 program
 {
-    char x;
-    int y;
-    x = 4;
-    y = 7;
-    print(x);
-    x = 10;
-    print(x);
-    print(y); 
+    print(1 + 2);
+    print(6 / 3);
+    print(2 * 3);
+    print(7 - 2);
 }
