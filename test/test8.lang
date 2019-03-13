@@ -12,7 +12,7 @@ program
         int b;
     } bb_struct;
     bb_struct cc;
-    int foo();
+    char foo();
     int boo()
     {
         return 200;
