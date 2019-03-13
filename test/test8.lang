@@ -37,12 +37,12 @@ program
     print(b);
     b = coo(a, 10);
     print(b);
-    cc.a.a = coo(a,b);
+    cc.a.a = 200;
     cc.a.b = 100;
     cc.a.c = 500;
     print(cc.a.a);
     cc.b = coo(cc.a.b, cc.a.c);
     print(cc.b);
-    a = doo(65,63);
-    print(a);
+    b = doo(65,63);
+    print(b);
 }
