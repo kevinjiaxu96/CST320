@@ -51,7 +51,7 @@ public:
     }
     virtual void Visit(cVarExprNode *node)
     {
-        VisitAllChildren(node);
+        // VisitAllChildren(node);
         if (node->GetType()->IsChar())
             EmitStringNL("PUSHCVAR " + std::to_string(node->GetOffset()));
         else
