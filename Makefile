@@ -64,3 +64,6 @@ assem:
 
 push:
 	git add ./ && git commit -m "test" && git push
+
+pull: clean
+	git pull
