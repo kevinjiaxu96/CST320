@@ -66,6 +66,39 @@ public:
         else
             EmitStringNL("POPVAR " + std::to_string(varNode->GetOffset()));
     }
+    virtual void Visit(cBinaryExprNode *node)
+    {
+        int op = node->GetOp()->GetOpValue();
+        node->GetExpr(0)->Visit(this);
+        node->GetExpr(2)->Visit(this);
+        switch(op)
+        {
+            case '+':
+                EmitStringNL("PLUS");
+                break;
+            case '-':
+                EmitStringNL("MINUS");
+                break;
+            case '*':
+                EmitStringNL("TIMEs");
+                break;
+            case '/':
+                EmitStringNL("DIVIDE");
+                break;
+            case EQUALS:
+                EmitStringNL("EQ");
+                break;
+            case NEQUALS:
+                EmitStringNL("NE");
+                break;
+            case OR:
+                EmitStringNL("OR");
+                break;
+            case AND:
+                EmitStringNL("AND");
+                break;
+        }
+    }
 protected:
     virtual void EmitStringNL(std::string str)
     {

@@ -58,6 +58,10 @@ class cOpNode : public cAstNode
 
             return result;
         }
+        virtual int GetOpValue()
+        {
+            return m_op;
+        }
     protected:
         int m_op;      // the operand
 };
