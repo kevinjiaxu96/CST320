@@ -28,6 +28,7 @@ public:
     virtual void Visit(cProgramNode *node)
     {
         cBlockNode *block = node->GetBlock();
+        EmitStringNL("function main");
         EmitStringNL("main:");
         EmitString("ADJSP ");
         EmitInt(RoundUp(block->GetSize()));
@@ -98,6 +99,10 @@ public:
                 EmitStringNL("AND");
                 break;
         }
+    }
+    virtual void Visit(cFuncExprNode *node)
+    {
+
     }
 protected:
     virtual void EmitStringNL(std::string str)
