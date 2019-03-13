@@ -24,7 +24,7 @@ program
             return z;
         }
         y = foo(11, 50);
-        print(y)
+        print(y);
     }
     print(x);
     print(y);
