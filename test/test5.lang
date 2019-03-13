@@ -10,7 +10,7 @@ program
         char m;
         j = 100;
         m = 1;
-        x = 64
+        x = 64;
         print(j);
         print(x);
         print(m);
