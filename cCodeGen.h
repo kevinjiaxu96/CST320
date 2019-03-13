@@ -28,7 +28,7 @@ public:
     virtual void Visit(cProgramNode *node)
     {
         cBlockNode *block = node->GetBlock();
-        EmitStringNL("function main");
+        EmitStringNL(".function main");
         EmitStringNL("main:");
         EmitString("ADJSP ");
         EmitInt(RoundUp(block->GetSize()));
