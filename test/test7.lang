@@ -46,7 +46,7 @@ program
     }
     cc.b = 80;
     print(dd.b);
-    print(dd.c;
+    print(dd.c);
     print(x + y);
     print(x - y);
     print(x / y);
