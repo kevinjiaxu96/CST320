@@ -14,8 +14,6 @@ program
         print(j);
         print(x);
         print(m);
-        x = 112;
-        y = 1922;
     }
     {
         int y;
