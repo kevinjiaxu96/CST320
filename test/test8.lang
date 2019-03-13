@@ -17,7 +17,7 @@ program
     {
         return 200;
     }
-    int foo()
+    char foo()
     {
         return 13;
     }
@@ -35,9 +35,7 @@ program
     b = boo();
     print(a);
     print(b);
-    a = coo(50, 100);
     b = coo(a, 10);
-    print(a);
     print(b);
     cc.a.a = coo(a,b);
     cc.a.b = 100;
