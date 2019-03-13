@@ -80,7 +80,7 @@ public:
                 EmitStringNL("MINUS");
                 break;
             case '*':
-                EmitStringNL("TIMEs");
+                EmitStringNL("TIMES");
                 break;
             case '/':
                 EmitStringNL("DIVIDE");
