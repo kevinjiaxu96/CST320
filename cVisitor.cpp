@@ -2,6 +2,8 @@
 #include "cVisitor.h"
 #include "astnodes.h"
 
+#define WORD_SIZE 4
+
 void cVisitor::PreVisitAllNodes(cAstNode *node)
 {
     VisitAllChildren(node);
@@ -51,3 +53,18 @@ void cVisitor::Visit(cVarDeclNode *node)      { VisitAllChildren(node); }
 void cVisitor::Visit(cVarExprNode *node)      { VisitAllChildren(node); }
 void cVisitor::Visit(cWhileNode *node)        { VisitAllChildren(node); }
 
+/*************************************************************************
+* Name: RoundUp
+* Parameter: value
+* Description:
+*   Word Align the value.
+* 
+* PostCondition:
+*   If value is already aligned, then return the value.
+*   If value is not aligned, then return the next word aligned value.
+*************************************************************************/
+int cVisitor::RoundUp(int value)
+{
+    if (value % WORD_SIZE == 0) return value;
+    return value + WORD_SIZE - value % WORD_SIZE;
+}

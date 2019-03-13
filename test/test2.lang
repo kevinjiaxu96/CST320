@@ -5,5 +5,7 @@ program
     x = 4;
     y = 7;
     print(x);
+    x = 10;
+    print(x);
     print(y);
 }

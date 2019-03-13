@@ -11,8 +11,6 @@
 #include "cVisitor.h"
 #include <iostream>
 
-#define WORD_SIZE 4
-
 class cComputeSize : public cVisitor
 {
     public:
@@ -192,19 +190,4 @@ class cComputeSize : public cVisitor
     protected:
         int m_offset;       // Current offset
         int m_highwater;    // Maximum stack size
-        /*************************************************************************
-        * Name: RoundUp
-        * Parameter: value
-        * Description:
-        *   Word Align the value.
-        * 
-        * PostCondition:
-        *   If value is already aligned, then return the value.
-        *   If value is not aligned, then return the next word aligned value.
-        *************************************************************************/
-        int RoundUp(int value)
-        {
-            if (value % WORD_SIZE == 0) return value;
-            return value + WORD_SIZE - value % WORD_SIZE;
-        }
 };

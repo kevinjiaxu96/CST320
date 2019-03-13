@@ -30,7 +30,7 @@ public:
         cBlockNode *block = node->GetBlock();
         EmitStringNL("main:");
         EmitString("ADJSP ");
-        EmitInt(block->GetSize());
+        EmitInt(RoundUp(block->GetSize()));
         EmitStringNL("");
         VisitAllChildren(node);
         EmitStringNL("PUSH 0");
@@ -48,14 +48,6 @@ public:
         EmitString("PUSH ");
         EmitInt(node->GetValue());
         EmitStringNL("");
-    }
-    virtual void Visit(cVarExprNode *node)
-    {
-        VisitAllChildren(node);
-        if (node->GetType()->IsChar())
-            EmitStringNL("PUSHCVAR " + std::to_string(node->GetOffset()));
-        else
-            EmitStringNL("PUSHVAR " + std::to_string(node->GetOffset()));
     }
     virtual void Visit(cAssignNode *node)
     {
