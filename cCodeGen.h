@@ -41,7 +41,6 @@ public:
         node->GetExpr()->Visit(this);
         EmitStringNL("CALL @print");
         EmitStringNL("POP");
-        EmitStringNL("POP");
     }
     virtual void Visit(cIntExprNode *node)
     {
