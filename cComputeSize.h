@@ -114,6 +114,20 @@ class cComputeSize : public cVisitor
         }
         /*************************************************************************
         * Name: Visit
+        * Parameter: cFuncExprNode
+        * Description:
+        *   Compute all its child nodes' size and offset then resetting
+        *   the high water mark and the offset because they are only relative
+        *   to the function scope.
+        *************************************************************************/
+       virtual void Visit(cFuncExprNode *node)
+       {
+           cSymbol *name = node->GetNameSym();
+           node->SetParamSize(name->GetDecl()->GetParamSize());
+           VisitAllChildren(node);
+       }
+        /*************************************************************************
+        * Name: Visit
         * Parameter: cFuncDeclNode
         * Description:
         *   Compute all its child nodes' size and offset then resetting
@@ -129,6 +143,7 @@ class cComputeSize : public cVisitor
             VisitAllChildren(node);
             node->SetOffset(0);
             node->SetSize(RoundUp(m_highwater));
+            node->SetParamSize(-(RoundUp(m_offset) - 12));
             m_offset = old_offset;
             m_highwater = old_highwater;
         }
