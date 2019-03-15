@@ -1,48 +1,14 @@
 program
 {
-    char a;
-    int b;
-    struct {
-        char a;
-        int b;
-        int c;
-    } aa_struct;
-    struct {
-        aa_struct a;
-        int b;
-    } bb_struct;
-    bb_struct cc;
-    char foo();
-    int boo()
-    {
-        return 200;
-    }
-    char foo()
-    {
-        return 13;
-    }
-    int coo(int a, int b)
-    {
-        int c;
-        c = a + b;
-        return c;
-    }
-    int doo(char a, char b, char c)
-    {
-        return 0;
-    }
-    a = foo();
-    b = boo();
+    int a;
+    a = 1;
+
+    if (a)
+        a = 2;
+    else
+        a = 3;
+    endif;
+    
     print(a);
-    print(b);
-    b = coo(a, 10);
-    print(b);
-    cc.a.a = 50;
-    cc.a.b = 100;
-    cc.a.c = 500;
-    print(cc.a.a);
-    cc.b = coo(cc.a.b, cc.a.c);
-    print(cc.b);
-    b = doo(65,63, 66);
-    print(b);
+    return 0;
 }
