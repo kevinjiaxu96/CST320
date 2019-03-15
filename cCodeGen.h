@@ -100,6 +100,27 @@ public:
                 break;
         }
     }
+    virtual void Visit(cFuncDeclNode *node)
+    {
+        if (node->IsFullyDefined())
+        {
+            cDeclsNode *decls = node->GetParams();
+            cDeclsNode *locals = node->GetLocals();
+            cStmtsNode *stmts = node->GetStmts();
+            if (decls != nullptr)
+                decls->Visit(this);
+            EmitStringNL(".function " + node->GetName());
+            EmitStringNL(node->GetName() + ":");
+            EmitString("ADJSP ");
+            EmitInt(node->GetSize());
+            EmitStringNL("");
+            if (locals != nullptr)
+                locals->Visit(this);
+            if (stmts != nullptr)
+                stmts->Visit(this);
+            EmitStringNL("RETURNV");
+        }
+    }
     virtual void Visit(cFuncExprNode *node)
     {
 
