@@ -123,7 +123,7 @@ public:
     }
     virtual void Visit(cFuncExprNode *node)
     {
-
+        
     }
 protected:
     virtual void EmitStringNL(std::string str)
