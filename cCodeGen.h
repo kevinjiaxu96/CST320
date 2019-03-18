@@ -104,6 +104,8 @@ public:
     {
         if (node->IsFullyDefined())
         {
+            std::string endDefineLabel = GenerateLabel();
+            EmitStringNL("JUMP @" + endDefineLabel);
             cDeclsNode *decls = node->GetParams();
             cDeclsNode *locals = node->GetLocals();
             cStmtsNode *stmts = node->GetStmts();
@@ -119,6 +121,7 @@ public:
             if (stmts != nullptr)
                 stmts->Visit(this);
             EmitStringNL("RETURNV");
+            EmitStringNL(endDefineLabel + ":");
         }
     }
     virtual void Visit(cFuncExprNode *node)
