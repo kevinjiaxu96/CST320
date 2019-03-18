@@ -126,6 +126,7 @@ public:
     }
     virtual void Visit(cFuncExprNode *node)
     {
+        std::cout << node->ToString() << std::endl;
         EmitStringNL("CALL @" + node->GetName());
         if (node->GetParamSize() > 0)
         {
