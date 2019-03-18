@@ -88,12 +88,12 @@ class cFuncExprNode : public cExprNode
 
         cSymbol* GetNameSym()
         {
-            return dynamic_cast<cSymbol*>(GetChild(1));
+            return dynamic_cast<cSymbol*>(GetChild(0));
         }
 
         string GetName()
         {
-            cSymbol* sym = dynamic_cast<cSymbol*>(GetChild(1));
+            cSymbol* sym = dynamic_cast<cSymbol*>(GetChild(0));
             return sym->GetName();
         }
 
