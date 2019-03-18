@@ -57,7 +57,7 @@ lang: $(OBJS)
 	g++ $(OBJS) -o lang
 
 tar:
-	tar -cvf $(TAR_FILE) *.[h] *.cpp *.[l] *.[y] [mM]akefile
+	tar -cvf $(TAR_FILE) *.[h] *.cpp *.[l] *.[y] io320.sl [mM]akefile
 
 assem:
 	slasm –dbg -list langoutout.sl io320.sl
