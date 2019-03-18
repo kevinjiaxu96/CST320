@@ -172,21 +172,7 @@ class cComputeSize : public cVisitor
         *************************************************************************/
         virtual void Visit(cParamsNode *node)
         {
-            // for(auto it = node->FirstChild(); it != node->LastChild(); it++)
-            // {
-            //     cVarDeclNode* param = dynamic_cast<cVarDeclNode*>((*it));
-            //     Visit(param);
-            //     m_offset = RoundUp(m_offset);
-            // }
-            // node->SetSize(m_offset);
-            // if (m_offset > m_highwater)
-            //     m_highwater = m_offset;
-
-            // Init the offset based on function call stack overhead
             m_offset = -12;
-
-            // Need to loop through params because computation runs
-            // opposite of other vars
             for (int ii=0; ii<node->NumDecls(); ii++)
             {
                 cDeclNode *param = node->GetDecl(ii);
@@ -227,9 +213,4 @@ class cComputeSize : public cVisitor
     protected:
         int m_offset;       // Current offset
         int m_highwater;    // Maximum stack size
-        int RoundDown(int value)
-        {
-            if (value % WORD_SIZE == 0) return value;
-            return value - (WORD_SIZE + value%WORD_SIZE);
-        }
 };

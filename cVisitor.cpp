@@ -68,3 +68,9 @@ int cVisitor::RoundUp(int value)
     if (value % WORD_SIZE == 0) return value;
     return value + WORD_SIZE - value % WORD_SIZE;
 }
+
+int cVisitor::RoundDown(int value)
+{
+    if (value % WORD_SIZE == 0) return value;
+    return value - (WORD_SIZE + value%WORD_SIZE);
+}

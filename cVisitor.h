@@ -65,4 +65,5 @@ class cVisitor
         void PostVisitAllNodes(cAstNode *node);
         void VisitAllChildren(cAstNode *node);
         int RoundUp(int value);
+        int RoundDown(int value);
 };
