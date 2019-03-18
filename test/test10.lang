@@ -2,10 +2,20 @@ program
 {
     char a;
     int b;
-    b = 0;
+    b = 1;
     a = 10;
     while(a != 0) {
         print(1);
+        a = a - 1;
+    }
+    int foo(int a, init b)
+    {
+        return a * b;
+    }
+    a = 5;
+    while(a != 0) {
+        b = foo(b, a);
+        print(b);
         a = a - 1;
     }
 }
