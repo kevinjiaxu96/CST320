@@ -17,6 +17,7 @@
 #include "cStmtNode.h"
 #include "cStmtsNode.h"
 #include "cExprNode.h"
+#include <iostream>
 
 class cIfNode : public cStmtNode
 {
@@ -31,7 +32,10 @@ class cIfNode : public cStmtNode
             AddChild(elseStmt);
         }
         cExprNode *GetCondition() {return dynamic_cast<cExprNode*>(GetChild(0));}
-        cStmtNode *If() {return dynamic_cast<cStmtNode*>(GetChild(1));}
+        cStmtNode *If() {
+            std::cout << GetChild(1)->ToString() << std::endl;
+            return dynamic_cast<cStmtNode*>(GetChild(1));
+        }
         cStmtNode *Else() {return dynamic_cast<cStmtNode*>(GetChild(2));}
         // Return a string representation of the node
         virtual string NodeType() { return string("if"); }
