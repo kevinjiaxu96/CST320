@@ -126,7 +126,8 @@ public:
     }
     virtual void Visit(cFuncExprNode *node)
     {
-        node->GetParamList()->Visit(this);
+        if (node->GetParamList())
+            node->GetParamList()->Visit(this);
         EmitStringNL("CALL @" + node->GetName());
         if (node->GetParamSize() > 0)
         {
