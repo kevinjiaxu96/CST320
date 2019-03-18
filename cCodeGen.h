@@ -136,12 +136,12 @@ public:
         std::string endifLabel = GenerateLabel();
         node->GetCondition()->Visit(this);
         EmitStringNL("JUMPE @" + ifLabel);
+        node->If()->Visit(this);
+        EmitStringNL("JUMP @" + endifLabel);
+        EmitStringNL(ifLabel + ":");
         if (node->Else() != nullptr) {
             node->Else()->Visit(this);
-            EmitStringNL("JUMP @" + endifLabel);
         }
-        EmitStringNL(ifLabel + ":");
-        node->If()->Visit(this);
         EmitStringNL(endifLabel + ":");
     }
 protected:
