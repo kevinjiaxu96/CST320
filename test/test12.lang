@@ -7,7 +7,7 @@ program
         return a + i;
     }
     b = 0;
-    if (b)
+    if (b == 0)
         print(0);
     else
         print(1);
