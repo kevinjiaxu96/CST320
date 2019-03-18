@@ -2,11 +2,11 @@ program
 {
     char a;
     int b;
-    char foo(int a)
+    char foo()
     {
         return 13;
     }
-    a = foo(10);
+    a = foo();
     print(0);
     print(a);
     print(1);
