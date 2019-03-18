@@ -7,26 +7,5 @@ program
         int b;
         int c;
     } aa_struct;
-    char foo();
-    int boo()
-    {
-        return 200;
-    }
-    char foo()
-    {
-        return 13;
-    }
-    int coo(int a, int b)
-    {
-        int c;
-        c = a + b;
-        return c;
-    }
-    int doo(char a, char b, char c)
-    {
-        return 0;
-    }
-    a = foo();
-    b = boo();
     print(a);
 }
