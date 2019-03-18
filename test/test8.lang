@@ -2,9 +2,15 @@ program
 {
     char a;
     int b;
+    char foo();
+    int boo(int a, int b);
     char foo()
     {
         return 13;
+    }
+    int boo(int a, int b)
+    {
+        return a + b;
     }
     a = foo();
     print(0);
