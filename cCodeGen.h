@@ -149,6 +149,18 @@ public:
         }
         EmitStringNL(endifLabel + ":");
     }
+
+    virtual void Visit(cWhileNode *node)
+    {
+        std::string loopLabel = GenerateLabel();
+        std::string endLoopLabel = GenerateLabel();
+        EmitStringNL(loopLabel + ":");  
+        node->GetCondition()->Visit(this);
+        EmitString("JUMPE @"+ endLoopLabel + "\n"); //Break/Jump if false
+        node->GetStmts()->Visit(this);    
+        EmitString("JUMP @" + loopLabel + "\n");
+        EmitStringNL(endLoopLabel + ":");
+    }
 protected:
     virtual void EmitStringNL(std::string str)
     {

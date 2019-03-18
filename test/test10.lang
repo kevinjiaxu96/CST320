@@ -1,0 +1,11 @@
+program
+{
+    char a;
+    int b;
+    b = 0;
+    a = 10;
+    while(a != 0) {
+        print(1);
+        a = a - 1;
+    }
+}
