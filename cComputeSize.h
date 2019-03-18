@@ -143,6 +143,7 @@ class cComputeSize : public cVisitor
             VisitAllChildren(node);
             node->SetOffset(0);
             node->SetSize(RoundUp(m_highwater));
+            std::cout << node->ToString() << std::endl;
             node->SetParamSize(-(RoundUp(m_offset) - 12));
             m_offset = old_offset;
             m_highwater = old_highwater;
