@@ -121,11 +121,11 @@ public:
             EmitStringNL("RETURNV");
         }
     }
-    // virtual void Visit(cFuncExprNode *node)
-    // {
-    //     EmitStringNL("CALL @" + node->GetName());
-    //     EmitStringNL("POPARGS " + std::to_string(node->GetParamSize()));
-    // }
+    virtual void Visit(cFuncExprNode *node)
+    {
+        EmitStringNL("CALL @" + node->GetName());
+        EmitStringNL("POPARGS " + std::to_string(node->GetParamSize()));
+    }
     
     // virtual void Visit(cIfNode *node)
     // {
