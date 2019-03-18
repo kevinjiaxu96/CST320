@@ -18,5 +18,5 @@ program
     print(a);
     print(1);
     print(b);
-    return 0;
+    print(300);
 }
