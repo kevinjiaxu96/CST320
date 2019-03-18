@@ -3,9 +3,18 @@ program
     char a;
     int b;
     b = 0;
+    a = 1;
     if (b == 0)
         print(0);
     else
         print(1);
+    endif;
+    if (b != 0)
+        print(100);
+    endif;
+    if (b && a)
+        print(200);
+    else
+        print(300);
     endif;
 }
