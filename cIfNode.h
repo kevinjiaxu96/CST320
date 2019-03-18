@@ -33,7 +33,6 @@ class cIfNode : public cStmtNode
         }
         cExprNode *GetCondition() {return dynamic_cast<cExprNode*>(GetChild(0));}
         cStmtsNode *If() {
-            std::cout << GetChild(1)->ToString() << std::endl;
             return dynamic_cast<cStmtsNode*>(GetChild(1));
         }
         cStmtNode *Else() {return dynamic_cast<cStmtNode*>(GetChild(2));}
