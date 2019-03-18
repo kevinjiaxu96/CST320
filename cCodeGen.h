@@ -135,7 +135,7 @@ public:
         std::string label1 = GenerateLabel();
         std::string label2 = GenerateLabel();
         node->GetCondition()->Visit(this);
-        EmitStringNL("JUMP @" + label1);
+        EmitStringNL("JUMPE @" + label1);
         node->If()->Visit(this);
         EmitStringNL("JUMP @" + label2);
         EmitStringNL(label1 + ":");

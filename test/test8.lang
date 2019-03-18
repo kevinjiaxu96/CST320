@@ -2,11 +2,6 @@ program
 {
     char a;
     int b;
-    struct {
-        char a;
-        int b;
-        int c;
-    } aa_struct;
     char foo(int a)
     {
         return 13;
