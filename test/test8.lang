@@ -8,15 +8,9 @@ program
     {
         return 13;
     }
-    int boo(int a, int b)
-    {
-        return a + b;
-    }
     a = foo();
-    b = boo(20, 10);
     print(0);
     print(a);
     print(1);
-    print(b);
     print(300);
 }
