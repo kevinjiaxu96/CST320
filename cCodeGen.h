@@ -132,13 +132,17 @@ public:
     
     virtual void Visit(cIfNode *node)
     {
-        std::string label1 = GenerateLabel();
+        std::string ifLabel = GenerateLabel();
+        std::string endifLabel = GenerateLabel();
         node->GetCondition()->Visit(this);
-        EmitStringNL("JUMPE @" + label1);
-        if (node->Else() != nullptr)
+        EmitStringNL("JUMPE @" + ifLabel);
+        if (node->Else() != nullptr) {
             node->Else()->Visit(this);
-        EmitStringNL(label1 + ":");
-            node->If()->Visit(this);
+            EmitStringNL("JUMPE " + endifLabel);
+        }
+        EmitStringNL(ifLabel + ":");
+        node->If()->Visit(this);
+        EmitStringNL(endifLabel + ":");
     }
 protected:
     virtual void EmitStringNL(std::string str)
