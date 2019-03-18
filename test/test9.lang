@@ -1,0 +1,11 @@
+program
+{
+    char a;
+    int b;
+    b = 0;
+    if (b == 0)
+        print(0);
+    else
+        print(1);
+    endif;
+}
