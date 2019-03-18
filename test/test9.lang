@@ -2,7 +2,7 @@ program
 {
     char a;
     int b;
-    b = 1;
+    b = 0;
     if (b == 0)
         print(0);
     else
