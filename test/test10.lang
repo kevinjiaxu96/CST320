@@ -4,13 +4,13 @@ program
     int b;
     b = 1;
     a = 10;
-    while(a != 0) {
-        print(1);
-        a = a - 1;
-    }
     int foo(int a, int b)
     {
         return a * b;
+    }
+    while(a != 0) {
+        print(1);
+        a = a - 1;
     }
     a = 5;
     while(a != 0) {
