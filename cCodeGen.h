@@ -157,7 +157,7 @@ public:
         EmitStringNL(loopLabel + ":");  
         node->GetCondition()->Visit(this);
         EmitString("JUMPE @"+ endLoopLabel + "\n"); //Break/Jump if false
-        node->GetStmts()->Visit(this);    
+        node->GetStmt()->Visit(this);    
         EmitString("JUMP @" + loopLabel + "\n");
         EmitStringNL(endLoopLabel + ":");
     }
