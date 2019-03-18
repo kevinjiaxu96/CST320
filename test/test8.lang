@@ -7,5 +7,11 @@ program
         int b;
         int c;
     } aa_struct;
+    char foo();
+    char foo()
+    {
+        return 13;
+    }
+    a = foo();
     print(a);
 }
