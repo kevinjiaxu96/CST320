@@ -7,10 +7,10 @@ program
         int b;
         int c;
     } aa_struct;
-    char foo()
+    char foo(int a)
     {
         return 13;
     }
-    a = foo();
+    a = foo(10);
     print(a);
 }
