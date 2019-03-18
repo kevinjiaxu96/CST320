@@ -138,7 +138,7 @@ public:
         EmitStringNL("JUMPE @" + ifLabel);
         if (node->Else() != nullptr) {
             node->Else()->Visit(this);
-            EmitStringNL("JUMP " + endifLabel);
+            EmitStringNL("JUMP @" + endifLabel);
         }
         EmitStringNL(ifLabel + ":");
         node->If()->Visit(this);
