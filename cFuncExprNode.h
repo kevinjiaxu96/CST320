@@ -86,6 +86,11 @@ class cFuncExprNode : public cExprNode
             return sym->GetDecl()->GetType();
         }
 
+        cParamListNode*  GetParamList()
+        {
+            return dynamic_cast<cParamListNode*>(GetChild(1));
+        }
+
         cSymbol* GetNameSym()
         {
             return dynamic_cast<cSymbol*>(GetChild(0));
@@ -96,7 +101,7 @@ class cFuncExprNode : public cExprNode
             cSymbol* sym = dynamic_cast<cSymbol*>(GetChild(0));
             return sym->GetName();
         }
-
+        
         virtual int GetParamSize() { return m_paramSize; }
         virtual void SetParamSize(int size) { m_paramSize = size; }
 
