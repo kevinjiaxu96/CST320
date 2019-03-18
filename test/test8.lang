@@ -7,6 +7,7 @@ program
         return 13;
     }
     a = foo(10);
+    print(0);
     print(a);
     print(1);
 }
