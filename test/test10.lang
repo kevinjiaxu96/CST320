@@ -4,9 +4,9 @@ program
     int b;
     b = 1;
     a = 10;
-    int foo(int a, int b)
+    int boo(int a, int b)
     {
-        return a * b;
+        return a + b;
     }
     while(a != 0) {
         print(1);
