@@ -11,6 +11,5 @@ program
     {
         return 13;
     }
-    a = foo();
     print(a);
 }
